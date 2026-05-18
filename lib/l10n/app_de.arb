@@ -1,0 +1,49 @@
+{
+  "appTitle": "AiBrewGenius",
+  "@appTitle": {
+    "description": "Der Titel der Anwendung"
+  },
+  "userProfile": "Benutzerprofil",
+  "name": "Name",
+  "save": "Speichern",
+  "saveProfile": "Profil speichern",
+  "language": "Sprache",
+  "settings": "Einstellungen",
+  "waterProfiles": "Wasserprofile",
+  "brewKettles": "Braukessel",
+  "fermenters": "Fermentierer",
+  "keezer": "Keezer",
+  "fermenterControllers": "Fermentierer-Kontroller",
+  "packaging": "Zielmenge, Abfüllen & Lagern",
+  "finingAgents": "Klärmittel",
+  "howTo": "How To's",
+  "breweryShops": "Brauerei Shops",
+  "integrations": "Integration",
+  "brewfather": "Brewfather",
+  "yeast": "Hefe",
+  "fermentables": "Vergärbare Zutaten",
+  "hops": "Hopfen",
+  "miscs": "Sonstiges",
+  "recipes": "Rezepte",
+  "batches": "Sud / Batches",
+  "videoInstructions": "Video Anleitungen",
+  "aiDisclaimer": "Dieses Rezept wurde von einer KI erstellt. Keine Garantie für Qualität oder Richtigkeit.",
+  "tapDetails": "Zapfhahn # {number} Details",
+  "@tapDetails": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "beerName": "Bier Name",
+  "tappedAt": "Angezapft am",
+  "bestBefore": "Genießbar bis",
+  "notSet": "Nicht festgelegt",
+  "cancel": "Abbrechen",
+  "empty": "Leer",
+  "noConfig": "Noch keine Konfiguration vorhanden.",
+  "configureNow": "Jetzt konfigurieren",
+  "analyzeRecipe": "Rezept analysieren",
+  "analysisResult": "Analyse Ergebnis"
+}

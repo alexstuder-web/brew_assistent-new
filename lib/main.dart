@@ -1,122 +1,144 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'pages/rapt_dashboard_page.dart';
+import 'pages/user_profile_page.dart';
+import 'pages/recipe_prompt_page.dart';
+import 'pages/brew_entry_page.dart';
+import 'pages/discovery_welcome_page.dart';
+import 'l10n/app_localizations.dart';
+
+import 'services/user_profile_service.dart';
+import 'services/water_profile_service.dart';
+import 'services/brew_kettle_service.dart';
+import 'services/fermenter_service.dart';
+import 'services/fermenter_controller_service.dart';
+import 'services/malt_depot_service.dart';
+import 'services/packaging_profile_service.dart';
+import 'services/fining_agents_service.dart';
+import 'services/yeast_bank_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  await initializeDateFormatting('de_DE', null);
+
+  final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
+  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: supabaseAnonKey,
+    postgrestOptions: const PostgrestClientOptions(schema: 'aibrewgenius'),
+  );
+
+  final profileService = UserProfileService();
+  final profile = await profileService.fetchDefaultProfile();
+  final initialLocale = Locale(profile?.language ?? 'de');
+
+  runApp(BrewMateApp(initialLocale: initialLocale));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BrewMateApp extends StatefulWidget {
+  const BrewMateApp({
+    super.key,
+    required this.initialLocale,
+    this.profileRepository,
+    this.waterRepository,
+    this.brewKettleRepository,
+    this.fermenterRepository,
+    this.fermenterControllerRepository,
+    this.maltDepotRepository,
+    this.packagingRepository,
+    this.finingAgentsRepository,
+    this.yeastRepository,
+  });
 
-  // This widget is the root of your application.
+  final Locale initialLocale;
+  final UserProfileRepository? profileRepository;
+  final WaterProfileRepository? waterRepository;
+  final BrewKettleRepository? brewKettleRepository;
+  final FermenterRepository? fermenterRepository;
+  final FermenterControllerRepository? fermenterControllerRepository;
+  final MaltDepotRepository? maltDepotRepository;
+  final PackagingProfileRepository? packagingRepository;
+  final FiningAgentsRepository? finingAgentsRepository;
+  final YeastBankRepository? yeastRepository;
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _BrewMateAppState? state = context.findAncestorStateOfType<_BrewMateAppState>();
+    state?.setLocale(newLocale);
+  }
+
+  @override
+  State<BrewMateApp> createState() => _BrewMateAppState();
+}
+
+class _BrewMateAppState extends State<BrewMateApp> {
+  late Locale _locale;
+
+  @override
+  void initState() {
+    super.initState();
+    _locale = widget.initialLocale;
+    _updateDateFormatting();
+  }
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+    _updateDateFormatting();
+  }
+
+  void _updateDateFormatting() {
+    final localeStr = _locale.languageCode == 'de' ? 'de_DE' : 'en_US';
+    initializeDateFormatting(localeStr, null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      title: 'AiBrewGenius',
+      debugShowCheckedModeBanner: false,
+      locale: _locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData.dark().copyWith(
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF2563EB),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Color(0xFF1E293B),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      initialRoute: BrewEntryPage.routeName,
+      routes: {
+        BrewEntryPage.routeName: (_) => const BrewEntryPage(),
+        UserProfilePage.routeName: (_) => UserProfilePage(
+              profileRepository: widget.profileRepository,
+              waterRepository: widget.waterRepository,
+              brewKettleRepository: widget.brewKettleRepository,
+              fermenterRepository: widget.fermenterRepository,
+              fermenterControllerRepository: widget.fermenterControllerRepository,
+              maltDepotRepository: widget.maltDepotRepository,
+              packagingRepository: widget.packagingRepository,
+              finingAgentsRepository: widget.finingAgentsRepository,
+              yeastRepository: widget.yeastRepository,
+            ),
+        DiscoveryWelcomePage.routeName: (_) => const DiscoveryWelcomePage(),
+        RecipePromptPage.routeName: (_) => const RecipePromptPage(),
+        RaptDashboardPage.routeName: (_) => const RaptDashboardPage(),
+      },
+      builder: (context, child) => child ?? const SizedBox.shrink(),
     );
   }
 }

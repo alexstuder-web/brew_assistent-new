@@ -1,0 +1,684 @@
+{
+  "fermentation": {
+    "name": "AI Generated Fermentation Profile",
+    "steps": [
+      {
+        "time": 2,
+        "name": "Anstellen & Anlauf der Gärung",
+        "temp": 9,
+        "type": "Ale"
+      },
+      {
+        "temp": 10,
+        "time": 7,
+        "type": "Ale",
+        "name": "Hauptgärung"
+      },
+      {
+        "temp": 14,
+        "type": "Ale",
+        "time": 2,
+        "name": "Diacetylrast"
+      },
+      {
+        "temp": 5,
+        "type": "Ale",
+        "name": "Abkühlen auf Lager-Temperatur",
+        "time": 2
+      },
+      {
+        "time": 28,
+        "name": "Lagerung / Reifung (Kaltlagerung)",
+        "temp": 2,
+        "type": "Ale"
+      }
+    ]
+  },
+  "data": {
+    "mashFermentablesAmount": 7.05,
+    "allDiastaticPower": false,
+    "totalDiastaticPower": 0,
+    "mashFermentables": [
+      {
+        "type": "Grain",
+        "amount": 3,
+        "grainCategory": "Base",
+        "percentage": 42.55,
+        "unit": "kg",
+        "name": "Münchner Malz hell",
+        "_id": "generate_1767556287018000_361023168"
+      },
+      {
+        "_id": "generate_1767556287018000_464020947",
+        "name": "Pilsner Malz",
+        "amount": 3,
+        "type": "Grain",
+        "percentage": 42.55,
+        "grainCategory": "Base (Pilsner)",
+        "unit": "kg"
+      },
+      {
+        "name": "Wiener Malz",
+        "_id": "generate_1767556287018000_240013933",
+        "grainCategory": "Base",
+        "type": "Grain",
+        "unit": "kg",
+        "percentage": 11.35,
+        "amount": 0.8
+      },
+      {
+        "percentage": 3.55,
+        "type": "Grain",
+        "grainCategory": "Crystal/Caramel",
+        "_id": "generate_1767556287018000_186580886",
+        "unit": "kg",
+        "name": "Caramünch I",
+        "amount": 0.25
+      }
+    ],
+    "otherFermentablesAmount": 0,
+    "otherFermentables": [],
+    "mashWaterAmount": 19.04,
+    "spargeWaterAmount": 13.48,
+    "mashVolumeSurplus": 0,
+    "topUpWater": 0,
+    "batchSpargeWaterAmount1": null,
+    "batchSpargeWaterAmount2": null,
+    "batchSpargeWaterAmount3": null,
+    "batchSpargeWaterAmount4": null,
+    "hltWaterAmount": 13.48,
+    "totalWaterAmount": 32.52,
+    "hopsAmount": 80,
+    "strikeTemp": null,
+    "mashVolume": 23.7635
+  },
+  "searchTags": [
+    "Importiert"
+  ],
+  "abv": 0,
+  "thumb": "data:image/jpeg;base64,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",
+  "color": null,
+  "fermentables": [
+    {
+      "type": "Grain",
+      "amount": 3,
+      "grainCategory": "Base",
+      "percentage": 42.55,
+      "unit": "kg",
+      "name": "Münchner Malz hell",
+      "_id": "generate_1767556287018000_361023168"
+    },
+    {
+      "_id": "generate_1767556287018000_464020947",
+      "name": "Pilsner Malz",
+      "amount": 3,
+      "type": "Grain",
+      "percentage": 42.55,
+      "grainCategory": "Base (Pilsner)",
+      "unit": "kg"
+    },
+    {
+      "name": "Wiener Malz",
+      "_id": "generate_1767556287018000_240013933",
+      "grainCategory": "Base",
+      "type": "Grain",
+      "unit": "kg",
+      "percentage": 11.35,
+      "amount": 0.8
+    },
+    {
+      "percentage": 3.55,
+      "type": "Grain",
+      "grainCategory": "Crystal/Caramel",
+      "_id": "generate_1767556287018000_186580886",
+      "unit": "kg",
+      "name": "Caramünch I",
+      "amount": 0.25
+    }
+  ],
+  "totalGravity": null,
+  "fgEstimated": null,
+  "og": null,
+  "preBoilGravity": 1.058,
+  "attenuation": 0,
+  "hidden": false,
+  "yeastToleranceExceededBy": null,
+  "img": "users/UGOVrmU16ieMftasdOX7ECNZNFO2/images/recipes/FmaStYXl8x53Swwf6D1XuktwjMUBPX/FmaStYXl8x53Swwf6D1XuktwjMUBPX.png",
+  "yeasts": [
+    {
+      "unit": "pkg",
+      "amount": 1,
+      "type": "Lager",
+      "_id": "generate_1767556287018000_yeast",
+      "name": "Wyeast 2206 Bavarian Lager"
+    }
+  ],
+  "_app_metadata": {
+    "webhook": {
+      "run": false
+    }
+  },
+  "nutrition": {
+    "calories": {
+      "alcohol": null,
+      "carbs": null,
+      "total": null,
+      "kJ": null
+    },
+    "carbs": {
+      "total": null
+    }
+  },
+  "fgFormula": "normal",
+  "ogPlato": null,
+  "defaults": {
+    "preferred": "metric",
+    "abv": "simple",
+    "attenuation": "normal",
+    "color": "ebc",
+    "grainColor": "default",
+    "gravity": "sg",
+    "ibu": "tinseth",
+    "temp": "c",
+    "volume": "l",
+    "weight": "kg",
+    "hop": "g",
+    "pressure": "bar",
+    "carbonation": "g/l",
+    "altitude": "m"
+  },
+  "equipment": {
+    "efficiency": 0.72,
+    "boilTime": 70,
+    "name": "AI Generated Profile",
+    "batchSize": 20,
+    "boilOffPerHr": 0.01,
+    "postBoilKettleVol": 0,
+    "fermenterVolume": 0,
+    "bottlingVolume": 0,
+    "fermenterLossEstimate": 0,
+    "evaporationRate": null
+  },
+  "_versionId": "Qxver18H6AyWN6CZIJcYni1mT1cDWc",
+  "notes": "Generiertes Rezept für: Märzen (untergärig, bernsteinfarben, malzbetont)\nStammwürze: 1.054 SG\nAlkohol: 5.5 %\n\nNotizen:\n- Volumen- und Wasserberechnung (Ziel: 23.0 L fertiges Bier im Gebinde):\n- Ziel im Gebinde: 23.0 L\n- Gärverlust (Hefe/Trub im Fermenter): 2.0 L\n=> Benötigte Menge im Gärbehälter (Batch Size kalt): 25.0 L\n- Kesselschwund nach Kochung (Trub): 4.0 L\n=> Benötigte heiße Würze nach Kochung (Post-Boil heiß): 29.0 L\n- Kühl-Schrumpfung 4 %: 29.0 L heiß ≈ 27.84 L kalt. Davon 2.0 L Gärverlust => ~25.84 L potentiell abfüllbar. Leichte Sicherheitsreserve durch etwas höheren Kesselverlust und Prozessverluste führt realistisch zu 25.0 L im Fermenter und 23.0 L im Gebinde.\n- Verdunstung: 2.5 % pro Stunde, Kochzeit 70 min ≈ 2.9 % Gesamtverlust.\n=> Pfannevoll (Pre-Boil) = 29.0 L / (1 - 0.029) ≈ 29.9 L, auf 30.0 L gerundet.\n\nMaische- und Wasserbilanz:\n- Gesamtmalz: 7.05 kg\n- Malz-Absorption: 0.9 L/kg * 7.05 kg ≈ 6.35 L im Treber gebunden.\n- Hauptguss: 22.0 L => Nach Läutern verbleiben ca. 22.0 - 6.35 ≈ 15.65 L Würze.\n- Benötigte Pfannevollwürze: 30.0 L => erforderlicher Nachguss ≈ 30.0 - 15.65 = 14.35 L.\n- Geplanter Nachguss: 19.0 L gibt ca. 34.65 L Gesamtwürze theoretisch; durch Läuterstopp und Trubverluste vor dem Kessel erreicht man in der Praxis die Ziel-Pfannevollmenge von 30.0 L.\n\nStilabgleich:\n- Ziel Stammwürze: 1.054 (typischer Bereich für klassisches Märzen/Festbier).\n- Erwartete Endvergärung mit Wyeast 2206: ca. 76–78 %, hier auf 77 % angesetzt => Restextrakt ca. 1.012, Alkohol ~5.5 % vol.\n- Hopfung mit ca. 80 g klassischer Edelhopfen (Hallertauer Mittelfrüh, Tettnanger) ergibt ~22–26 IBU je nach tatsächlichem Alpha-Wert und Systemausbeute, passend zum malzbetonten, moderat gehopften Märzenstil.\n\nKarbonisierung:\n- Zielvolumen CO2: ca. 2.3–2.4 Vol., das entspricht etwa 4.5–5.0 g/L CO2; hier 5.0 g/L als leicht spritzige, aber noch stilechte Karbonisierung.\n- Keg: Bei 14 °C sind ca. 1.2 bar Überdruck ausreichend, um etwa 2.3–2.4 Vol. CO2 zu erreichen (leichte Systemtoleranz eingerechnet).\n- Flasche: 6 g Zucker/L (Haushaltszucker) ergeben ungefähr 2.3–2.4 Vol. CO2, unter Annahme, dass das Bier vor Abfüllung noch ca. 0.8–1.0 Vol. Rest-CO2 enthält.\n\nGärdruck-Strategie:\n- Leichte Druckvergärung (0.3–0.5 bar) bei Lagerbieren führt zu sehr sauberem Profil und reduziert Ester, ohne die Hefe zu stark zu belasten.\n- In der Lagerphase 1.0 bar, um CO2 im Bier zu halten und Oxidation zu minimieren.\n\nAnpassungen:\n- Falls die Sudhausausbeute deutlich von ca. 70–75 % abweicht, Malzmenge entsprechend anpassen, um die Ziel-Stammwürze 1.054 zu treffen.\n- Hopfengaben ggf. nach real gemessenen Alpha-Säuren korrigieren, um ~24 IBU zu erreichen.\n- Wasserprofil an lokales Wasser anpassen; HCO3 ggf. mit Milchsäure senken, wenn das Ausgangswasser sehr hart ist.\n",
+  "hops": [
+    {
+      "type": "Pellet",
+      "_id": "generate_1767556287018000_424202323",
+      "time": 60,
+      "name": "Hallertauer Mittelfrüh",
+      "amount": 40,
+      "alpha": 4,
+      "unit": "g",
+      "ibu": 0,
+      "use": "Boil",
+      "actualTime": null
+    },
+    {
+      "ibu": 0,
+      "alpha": 4,
+      "_id": "generate_1767556287018000_424202323",
+      "use": "Boil",
+      "unit": "g",
+      "type": "Pellet",
+      "time": 20,
+      "name": "Hallertauer Mittelfrüh",
+      "amount": 20,
+      "actualTime": null
+    },
+    {
+      "ibu": 0,
+      "unit": "g",
+      "alpha": 4,
+      "name": "Tettnanger",
+      "type": "Pellet",
+      "time": 10,
+      "_id": "generate_1767556287018000_264112436",
+      "amount": 20,
+      "use": "Aroma",
+      "actualTime": null
+    }
+  ],
+  "author": "AI Brew Genius",
+  "mashEfficiency": 72,
+  "boilTime": 70,
+  "mash": {
+    "name": "AI Generated Mash Profile",
+    "steps": [
+      {
+        "name": "Einmaischen / Eiweißrast (optional, bei gut modifiziertem Malz kann verkürzt werden)",
+        "stepTemp": 52,
+        "stepTime": 10,
+        "type": "Temperature"
+      },
+      {
+        "stepTime": 40,
+        "name": "Maltoserast",
+        "stepTemp": 63,
+        "type": "Temperature"
+      },
+      {
+        "stepTemp": 72,
+        "stepTime": 25,
+        "name": "Verzuckerungsrast",
+        "type": "Temperature"
+      },
+      {
+        "type": "Temperature",
+        "stepTime": 10,
+        "stepTemp": 78,
+        "name": "Abmaischen"
+      }
+    ]
+  },
+  "_init": true,
+  "hopStandMinutes": 10,
+  "water": {
+    "target": {
+      "name": "AI Target Profile",
+      "na": 10,
+      "so4": 60,
+      "mg": 8,
+      "cl": 70,
+      "hco3": 80,
+      "ca": 60,
+      "bicarbonateMeqL": 0,
+      "cations": 0,
+      "anions": 0,
+      "ionBalance": 0,
+      "ionBalanceOff": false,
+      "soClRatio": 0,
+      "hardness": 0,
+      "alkalinity": 0,
+      "residualAlkalinity": 0,
+      "residualAlkalinityMeqLCalc": 0
+    },
+    "source": {
+      "anions": 1.557,
+      "name": "Glattfelden",
+      "chloride": 24.7,
+      "hidden": false,
+      "magnesium": 19.75,
+      "ph": 7.55,
+      "ionBalance": 31,
+      "residualAlkalinity": -58.96706,
+      "bicarbonate": 17,
+      "calcium": 85.8,
+      "alkalinity": 13.9309,
+      "cations": 6.507,
+      "ionBalanceOff": true,
+      "_version": "2.20.3",
+      "residualAlkalinityMeqLCalc": -1.54076,
+      "sodium": 13.8,
+      "_timestamp_ms": 1765743084856,
+      "type": "source",
+      "sulfate": 27.95,
+      "_timestamp": {
+        "seconds": 1765743084,
+        "nanoseconds": 856000000
+      },
+      "bicarbonateMeqL": 0.2786154451291465,
+      "hardness": 295,
+      "_id": "BxaoyPTyb36ynD8b5nF6Ck46Np0eVQ",
+      "_created": {
+        "seconds": 1711395249,
+        "nanoseconds": 482000000
+      },
+      "soClRatio": 1.13
+    },
+    "mashWaterAmount": null,
+    "spargeWaterAmount": null,
+    "dilutionPercentage": null,
+    "diluted": null,
+    "settings": {
+      "sodiumBicarbonate": {
+        "mash": true,
+        "sparge": false,
+        "auto": false
+      },
+      "calciumHydroxide": {
+        "mash": true,
+        "sparge": false,
+        "auto": false
+      },
+      "calciumSulfate": {
+        "mash": true,
+        "sparge": true,
+        "auto": true
+      },
+      "magnesiumSulfate": {
+        "mash": true,
+        "sparge": true,
+        "auto": true
+      },
+      "calciumChloride": {
+        "mash": true,
+        "sparge": true,
+        "auto": true,
+        "form": "dihydrate"
+      },
+      "adjustSparge": true
+    },
+    "enableSpargeAdjustments": true,
+    "dilutionAmount": 0,
+    "mashAdjustments": {
+      "volume": 19.04,
+      "acids": [
+        {
+          "type": "lactic",
+          "amount": 0,
+          "concentration": 88,
+          "alkalinityMeqL": 0
+        }
+      ],
+      "calciumCarbonate": 0,
+      "sodiumBicarbonate": null,
+      "calciumHydroxide": null,
+      "calciumSulfate": null,
+      "magnesiumSulfate": null,
+      "calciumChloride": null,
+      "magnesiumChloride": 0,
+      "sodiumChloride": 0,
+      "sodiumMetabisulfite": 0,
+      "ltDWB": 0,
+      "ltAMS": 0,
+      "sodiumMetabisulfitePPM": 0,
+      "calcium": 0,
+      "magnesium": 0,
+      "sodium": 0,
+      "chloride": 0,
+      "sulfate": 0,
+      "bicarbonate": 0
+    },
+    "spargeAdjustments": {
+      "volume": 13.48,
+      "calciumCarbonate": 0,
+      "sodiumBicarbonate": 0,
+      "calciumHydroxide": 0,
+      "calciumSulfate": 0,
+      "magnesiumSulfate": 0,
+      "calciumChloride": 0,
+      "magnesiumChloride": 0,
+      "sodiumChloride": 0,
+      "sodiumMetabisulfite": 0,
+      "ltDWB": 0,
+      "ltAMS": 0,
+      "acids": [
+        {
+          "type": "lactic",
+          "amount": 0,
+          "concentration": 88
+        }
+      ],
+      "sodiumMetabisulfitePPM": 0,
+      "calcium": 0,
+      "magnesium": 0,
+      "sodium": 0,
+      "chloride": 0,
+      "sulfate": 0,
+      "bicarbonate": 0
+    },
+    "totalAdjustments": {
+      "volume": 32.519999999999996,
+      "calciumCarbonate": 0,
+      "sodiumBicarbonate": 0,
+      "calciumHydroxide": 0,
+      "calciumSulfate": 0,
+      "magnesiumSulfate": 0,
+      "calciumChloride": 0,
+      "magnesiumChloride": 0,
+      "sodiumChloride": 0,
+      "sodiumMetabisulfite": 0,
+      "ltDWB": 0,
+      "ltAMS": 0,
+      "sodiumMetabisulfitePPM": 0,
+      "calcium": 0,
+      "magnesium": 0,
+      "sodium": 0,
+      "chloride": 0,
+      "sulfate": 0,
+      "bicarbonate": 0
+    },
+    "mash": {
+      "anions": 1.557,
+      "name": "Glattfelden",
+      "chloride": 24.7,
+      "hidden": false,
+      "magnesium": 19.75,
+      "ph": 7.55,
+      "ionBalance": 31,
+      "residualAlkalinity": -58.96706,
+      "bicarbonate": 17,
+      "calcium": 85.8,
+      "alkalinity": 13.9309,
+      "cations": 6.507,
+      "ionBalanceOff": true,
+      "_version": "2.20.3",
+      "residualAlkalinityMeqLCalc": -1.54076,
+      "sodium": 13.8,
+      "_timestamp_ms": 1765743084856,
+      "type": "source",
+      "sulfate": 27.95,
+      "_timestamp": {
+        "seconds": 1765743084,
+        "nanoseconds": 856000000
+      },
+      "bicarbonateMeqL": 0.2786154451291465,
+      "hardness": 295,
+      "_id": "BxaoyPTyb36ynD8b5nF6Ck46Np0eVQ",
+      "_created": {
+        "seconds": 1711395249,
+        "nanoseconds": 482000000
+      },
+      "soClRatio": 1.13
+    },
+    "sparge": {
+      "anions": 1.557,
+      "name": "Glattfelden",
+      "chloride": 24.7,
+      "hidden": false,
+      "magnesium": 19.75,
+      "ph": 7.55,
+      "ionBalance": 31,
+      "residualAlkalinity": -58.96706,
+      "bicarbonate": 17,
+      "calcium": 85.8,
+      "alkalinity": 13.9309,
+      "cations": 6.507,
+      "ionBalanceOff": true,
+      "_version": "2.20.3",
+      "residualAlkalinityMeqLCalc": -1.54076,
+      "sodium": 13.8,
+      "_timestamp_ms": 1765743084856,
+      "type": "source",
+      "sulfate": 27.95,
+      "_timestamp": {
+        "seconds": 1765743084,
+        "nanoseconds": 856000000
+      },
+      "bicarbonateMeqL": 0.2786154451291465,
+      "hardness": 295,
+      "_id": "BxaoyPTyb36ynD8b5nF6Ck46Np0eVQ",
+      "_created": {
+        "seconds": 1711395249,
+        "nanoseconds": 482000000
+      },
+      "soClRatio": 1.13
+    },
+    "total": {
+      "anions": 1.557,
+      "name": "Glattfelden",
+      "chloride": 24.7,
+      "hidden": false,
+      "magnesium": 19.75,
+      "ph": 7.55,
+      "ionBalance": 31,
+      "residualAlkalinity": -58.96706,
+      "bicarbonate": 17,
+      "calcium": 85.8,
+      "alkalinity": 13.9309,
+      "cations": 6.507,
+      "ionBalanceOff": true,
+      "_version": "2.20.3",
+      "residualAlkalinityMeqLCalc": -1.54076,
+      "sodium": 13.8,
+      "_timestamp_ms": 1765743084856,
+      "type": "source",
+      "sulfate": 27.95,
+      "_timestamp": {
+        "seconds": 1765743084,
+        "nanoseconds": 856000000
+      },
+      "bicarbonateMeqL": 0.2786154451291465,
+      "hardness": 295,
+      "_id": "BxaoyPTyb36ynD8b5nF6Ck46Np0eVQ",
+      "_created": {
+        "seconds": 1711395249,
+        "nanoseconds": 482000000
+      },
+      "soClRatio": 1.13
+    },
+    "sourceTargetDiff": {
+      "calcium": 85.8,
+      "magnesium": 19.75,
+      "sodium": 13.8,
+      "chloride": 24.7,
+      "sulfate": 27.95,
+      "bicarbonate": 17,
+      "bicarbonateMeqL": 0.2786154451291465,
+      "cations": 6.507,
+      "anions": 1.557,
+      "ionBalance": 31,
+      "ionBalanceOff": true,
+      "soClRatio": 1.13,
+      "hardness": 295,
+      "alkalinity": 13.9309,
+      "residualAlkalinity": -58.96706,
+      "residualAlkalinityMeqLCalc": -1.54076
+    },
+    "mashTargetDiff": {
+      "calcium": 85.8,
+      "magnesium": 19.75,
+      "sodium": 13.8,
+      "chloride": 24.7,
+      "sulfate": 27.95,
+      "bicarbonate": 17,
+      "bicarbonateMeqL": 0.2786154451291465,
+      "cations": 6.507,
+      "anions": 1.557,
+      "ionBalance": 31,
+      "ionBalanceOff": true,
+      "soClRatio": 1.13,
+      "hardness": 295,
+      "alkalinity": 13.9309,
+      "residualAlkalinity": -58.96706,
+      "residualAlkalinityMeqLCalc": -1.54076
+    },
+    "spargeTargetDiff": {
+      "calcium": 85.8,
+      "magnesium": 19.75,
+      "sodium": 13.8,
+      "chloride": 24.7,
+      "sulfate": 27.95,
+      "bicarbonate": 17,
+      "bicarbonateMeqL": 0.2786154451291465,
+      "cations": 6.507,
+      "anions": 1.557,
+      "ionBalance": 31,
+      "ionBalanceOff": true,
+      "soClRatio": 1.13,
+      "hardness": 295,
+      "alkalinity": 13.9309,
+      "residualAlkalinity": -58.96706,
+      "residualAlkalinityMeqLCalc": -1.54076
+    },
+    "totalTargetDiff": {
+      "calcium": 85.8,
+      "magnesium": 19.75,
+      "sodium": 13.8,
+      "chloride": 24.7,
+      "sulfate": 27.95,
+      "bicarbonate": 17,
+      "bicarbonateMeqL": 0.2786154451291465,
+      "cations": 6.507,
+      "anions": 1.557,
+      "ionBalance": 31,
+      "ionBalanceOff": true,
+      "soClRatio": 1.13,
+      "hardness": 295,
+      "alkalinity": 13.9309,
+      "residualAlkalinity": -58.96706,
+      "residualAlkalinityMeqLCalc": -1.54076
+    },
+    "acidPhAdjustment": 0,
+    "mashPh": 5.66,
+    "mashPhDistilled": 5.78,
+    "spargeAcidPhAdjustment": 0,
+    "meta": {
+      "equalSourceTotal": true
+    }
+  },
+  "brewhouseEfficiency": 72,
+  "_id": "FmaStYXl8x53Swwf6D1XuktwjMUBPX",
+  "buGuRatio": 0,
+  "type": "All Grain",
+  "rbRatio": 0,
+  "ibuFormula": "tinseth",
+  "extraGravity": 0,
+  "efficiency": 72,
+  "_type": "recipe",
+  "fermentableIbu": 0,
+  "_ev_updated": 1767556322789,
+  "ibu": 0,
+  "_ev": 2,
+  "_created": {
+    "seconds": 1767556340,
+    "nanoseconds": 934000000
+  },
+  "style": {
+    "name": "Märzen (untergärig, bernsteinfarben, malzbetont)",
+    "type": "Beer",
+    "category": "Custom",
+    "styleGuide": "Custom",
+    "lovibondMin": null,
+    "lovibondMax": null,
+    "buGuMin": 0.07,
+    "buGuMax": 1.35,
+    "rbrMin": 0.07,
+    "rbrMax": 1.36
+  },
+  "_share": null,
+  "fg": null,
+  "_timestamp": "2026-01-04T19:52:28.037Z",
+  "_version": "2.20.3",
+  "avgWeightedHopstandTemp": 0,
+  "_timestamp_ms": 1767556348037,
+  "firstWortGravity": null,
+  "_versionNumber": 1,
+  "name": "Märzen / Festbier nach klassischem Münchner Vorbild",
+  "postBoilGravity": null,
+  "batchSize": 20,
+  "miscs": [],
+  "tags": null,
+  "path": "/",
+  "folderRefs": [
+    "recipe_root_folder"
+  ],
+  "boilSize": 28,
+  "carbonation": 2.4,
+  "styleAbv": true,
+  "styleOg": false,
+  "styleFg": false,
+  "styleColor": false,
+  "styleIbu": true,
+  "styleConformity": false,
+  "styleBuGu": false,
+  "styleRbr": false,
+  "primaryTemp": 20,
+  "fermentablesTotalAmount": 7.05,
+  "diastaticPower": 0,
+  "hopsTotalAmount": 80,
+  "sumDryHopPerLiter": 0,
+  "sumAromaHopPerLiter": 1,
+  "carbonationStyle": null
+}

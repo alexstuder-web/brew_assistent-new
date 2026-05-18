@@ -1,11 +1,11 @@
 {
-    "name": "brew_assistant",
-    "short_name": "brew_assistant",
+    "name": "AiBrewGenius",
+    "short_name": "AiBrewGenius",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "AI Brewing Assistant",
+    "background_color": "#0F172A",
+    "theme_color": "#2563EB",
+    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

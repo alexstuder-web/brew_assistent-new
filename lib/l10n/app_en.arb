@@ -1,0 +1,46 @@
+{
+  "appTitle": "AiBrewGenius",
+  "userProfile": "User Profile",
+  "name": "Name",
+  "save": "Save",
+  "saveProfile": "Save Profile",
+  "language": "Language",
+  "settings": "Settings",
+  "waterProfiles": "Water Profiles",
+  "brewKettles": "Brew Kettles",
+  "fermenters": "Fermenters",
+  "keezer": "Keezer",
+  "fermenterControllers": "Fermenter Controllers",
+  "packaging": "Packaging & Storage",
+  "finingAgents": "Fining Agents",
+  "howTo": "How To's",
+  "breweryShops": "Brewery Shops",
+  "integrations": "Integrations",
+  "brewfather": "Brewfather",
+  "yeast": "Yeast",
+  "fermentables": "Fermentables",
+  "hops": "Hops",
+  "miscs": "Miscs",
+  "recipes": "Recipes",
+  "batches": "Batches",
+  "videoInstructions": "Video Instructions",
+  "aiDisclaimer": "This recipe was created by an AI. No guarantee for quality or correctness.",
+  "tapDetails": "Tap # {number} Details",
+  "@tapDetails": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "beerName": "Beer Name",
+  "tappedAt": "Tapped at",
+  "bestBefore": "Best before",
+  "notSet": "Not set",
+  "cancel": "Cancel",
+  "empty": "Empty",
+  "noConfig": "No configuration available yet.",
+  "configureNow": "Configure now",
+  "analyzeRecipe": "Analyze Recipe",
+  "analysisResult": "Analysis Result"
+}

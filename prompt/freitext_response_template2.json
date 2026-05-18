@@ -1,0 +1,133 @@
+{
+  "basis_bier": "Aus Beschreibung abgeleitet",
+  "bier_typ": "Aus Beschreibung abgeleitet",
+  "bjcp_stil": {
+    "name": "z.B. Märzen",
+    "kategorie": "z.B. Amber Malty European Lager",
+    "kategorie_nummer": "z.B. 6",
+    "stil_buchstabe": "z.B. A",
+    "guide": "BJCP 2021"
+  },
+  "stammwuerze_sg": 1.050,
+  "restextrakt_sg": 1.010,
+  "alkoholgehalt_vol_prozent": 5.0,
+  "ibu": 30,
+  "Zutaten": {
+    "Original_Malz": [
+      {
+        "Name": "",
+        "Menge_kg": 0.0,
+        "Anteil_Prozent": 0,
+        "Optimales_Schrot_Spaltmass_mm": 1.2
+      }
+    ],
+    "Original_Hopfen": [
+      {
+        "Sortenname": "",
+        "Alpha_Saeure": 0.0,
+        "Menge_g": 0,
+        "Einsatz": "Vorderwürze / Kochen / Whirlpool / Stopfen",
+        "Zeit_min": 0
+      }
+    ],
+    "Original_Hefe": {
+      "Empfehlung": "",
+      "Name": "",
+      "Hersteller": "",
+      "Typ": "Obergaerig / Untergaerig",
+      "Form": "Trocken / Fluessig",
+      "Menge_Packungen_oder_ml": "",
+      "Beschaffung_Notwendig": false
+    },
+    "Wasserprofil_Zielwerte": {
+      "Kalzium_Ca_mg_L": 0,
+      "Magnesium_Mg_mg_L": 0,
+      "Natrium_Na_mg_L": 0,
+      "Chlorid_Cl_mg_L": 0,
+      "Sulfat_SO4_mg_L": 0,
+      "Hydrogencarbonat_HCO3_mg_L": 0,
+      "Salzzugabe_Zeitpunkt": "Maische / Nachguss / Beides"
+    },
+    "Spezialzutaten": [
+      {
+        "Name": "",
+        "Menge": "",
+        "Einheit": "",
+        "Anwendung_Detail": "",
+        "Einsatzphase": ""
+      }
+    ],
+    "Klaer_und_Schonungsmittel": [
+      {
+        "Name": "",
+        "Menge": "",
+        "Phase": "",
+        "Zweck": "",
+        "Anwendung_Detail": "",
+        "Beschaffung_Notwendig": false
+      }
+    ]
+  },
+  "Prozessdaten": {
+    "Maischeplan": {
+      "Hauptguss_L": 0.0,
+      "Einmaischtemperatur_C": 0.0,
+      "Rasten": [
+        {
+          "Stufe": "",
+          "Temperatur_C": 0.0,
+          "Dauer_min": 0
+        }
+      ]
+    },
+    "Laeuterungsplan": {
+      "Nachgusswasser_Menge_L": 0.0,
+      "Nachgusswasser_Temperatur_C": 0.0,
+      "Ziel_pH_vor_Laeutern": "z.B. 5.4 - 5.6",
+      "Hinweis": ""
+    },
+    "Kochplan": {
+      "Pfannevoll_Tatsaechlich_L": 0.0,
+      "Gesamte_Kochdauer_min": 0,
+      "Wuerze_Kochen_Hinweis": ""
+    },
+    "Gaerungsplan": {
+      "Hefe_Anstelltemperatur_C": 0.0,
+      "Gaerverlauf": [
+        {
+          "Phase": "",
+          "Temperatur_C": 0.0,
+          "Dauer_Tage": 0,
+          "Druck_bar": 0.0,
+          "Druck_Begruendung": "",
+          "Hinweis": ""
+        }
+      ],
+      "Druck_Hinweis": "Zusammenfassung Hardware vs. Stil",
+      "Endvergaerungsgrad_Ziel_Prozent": 0
+    },
+    "Abfuell_und_Lagerungsplan": {
+      "Abfuellung_Typ": "Flasche / Keg / Beides",
+      "Karbonisierung_Ziel_CO2_g_L": 0.0,
+      "Karbonisierungsdauer_Tage": 0,
+      "Empfohlenes_Ausschankgas": "CO2 / Nitro / Mix",
+      "Keg_Druck_bar": 0.0,
+      "Keg_Karbonisierung_Temp_C": 0.0,
+      "Flaschen_Zucker_g_pro_L": 0.0,
+      "Flaschen_Karbonisierung_Temp_C": 0.0,
+      "Lagerung_Temperatur_C": 0.0,
+      "Lagerung_Dauer_Wochen": 0,
+      "Reifungshinweis": ""
+    },
+    "Mathematische_Volumenberechnung_CoT": {
+      "Schritt_1_Eimer_kalt_L": 0.0,
+      "Schritt_2_Ausschlag_heiss_L": 0.0,
+      "Schritt_3_Koch_Ende_heiss_L": 0.0,
+      "Schritt_4_Pfannevoll_L": 0.0,
+      "Kontrollrechnung_Notiz": "Hier alle Rechenschritte als Text dokumentieren"
+    }
+  },
+  "Notizen": [
+    ""
+  ]
+}
