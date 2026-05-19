@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'utils/env_config.dart';
 import 'pages/rapt_dashboard_page.dart';
 import 'pages/user_profile_page.dart';
 import 'pages/recipe_prompt_page.dart';
@@ -25,12 +26,11 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
   await initializeDateFormatting('de_DE', null);
 
-  final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
-
+  // URL aus aktuellem Hostname ableiten (lokal vs. VPS — siehe EnvConfig).
+  // Anon Key bleibt aus dem .env Asset (build-time, kann nicht runtime abgeleitet werden).
   await Supabase.initialize(
-    url: supabaseUrl,
-    anonKey: supabaseAnonKey,
+    url: EnvConfig.supabaseUrl(),
+    anonKey: EnvConfig.supabaseAnonKey(),
     postgrestOptions: const PostgrestClientOptions(schema: 'aibrewgenius'),
   );
 

@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/image_attachment.dart';
+import '../utils/env_config.dart';
 
 class OpenAIService {
-  static const String _defaultProxyBase = 'http://localhost:3000/api';
-
   OpenAIService()
       : _brewEndpoint = _deriveEndpoint('brew'),
         _shopEndpoint = _deriveEndpoint('shop-search'),
@@ -18,32 +16,17 @@ class OpenAIService {
   final Uri _imageEndpoint;
 
   String get proxyBaseUrl {
-    String baseUrl = const String.fromEnvironment('PROXY_URL', defaultValue: '');
-    if (baseUrl.isEmpty) {
-      baseUrl = dotenv.env['PROXY_URL'] ?? _defaultProxyBase;
-    }
-    if (baseUrl.endsWith('/')) {
-      baseUrl = baseUrl.substring(0, baseUrl.length - 1);
-    }
-    return baseUrl;
+    final url = EnvConfig.proxyUrl();
+    return url.endsWith('/') ? url.substring(0, url.length - 1) : url;
   }
 
   static Uri _deriveEndpoint(String path) {
-    // 1. Try dart-define (usually from CI/CD or local flutter run)
-    // 2. Try dotenv (usually from local .env file)
-    // 3. Fallback to default
-    String baseUrl = const String.fromEnvironment('PROXY_URL', defaultValue: '');
-    if (baseUrl.isEmpty) {
-      baseUrl = dotenv.env['PROXY_URL'] ?? _defaultProxyBase;
-    }
-
-    // Remove trailing slash
+    String baseUrl = EnvConfig.proxyUrl();
     if (baseUrl.endsWith('/')) {
       baseUrl = baseUrl.substring(0, baseUrl.length - 1);
     }
 
-    // Check if the baseUrl already ends with the path (e.g. if someone put .../api/brew in .env)
-    // To be safe, check for the path with a leading slash
+    // Check if the baseUrl already ends with the path
     if (baseUrl.endsWith('/$path')) {
       return Uri.parse(baseUrl);
     }
