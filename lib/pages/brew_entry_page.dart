@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'discovery_welcome_page.dart';
 import 'user_profile_page.dart';
-import 'rapt_dashboard_page.dart';
 import 'recipe_prompt_page.dart';
+import '../utils/env_config.dart';
 import '../widgets/entry_button.dart';
 
 class BrewEntryPage extends StatelessWidget {
@@ -21,6 +21,16 @@ class BrewEntryPage extends StatelessWidget {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Konnte Studio nicht öffnen.')),
+      );
+    }
+  }
+
+  Future<void> _openRaptDashboard(BuildContext context) async {
+    final uri = Uri.parse(EnvConfig.raptDashboardUrl());
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Konnte RAPT-Dashboard nicht öffnen.')),
       );
     }
   }
@@ -64,7 +74,7 @@ class BrewEntryPage extends StatelessWidget {
                     const SizedBox(height: 18),
                     EntryButton(
                       label: 'Currently Brewing',
-                      onPressed: () => _openRoute(context, RaptDashboardPage.routeName),
+                      onPressed: () => _openRaptDashboard(context),
                     ),
                     const SizedBox(height: 18),
                     EntryButton(

@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'utils/env_config.dart';
-import 'pages/rapt_dashboard_page.dart';
 import 'pages/user_profile_page.dart';
 import 'pages/recipe_prompt_page.dart';
 import 'pages/brew_entry_page.dart';
@@ -136,7 +135,6 @@ class _BrewMateAppState extends State<BrewMateApp> {
             ),
         DiscoveryWelcomePage.routeName: (_) => const DiscoveryWelcomePage(),
         RecipePromptPage.routeName: (_) => const RecipePromptPage(),
-        RaptDashboardPage.routeName: (_) => const RaptDashboardPage(),
       },
       builder: (context, child) => child ?? const SizedBox.shrink(),
     );

@@ -32,6 +32,15 @@ class EnvConfig {
     return 'https://api.${_baseDomain()}/api';
   }
 
+  /// RAPT Brewing Dashboard URL — wird in neuem Tab geöffnet.
+  /// Override via .env (RAPT_DASHBOARD_URL), z.B. wenn RAPT auf anderem VPS sitzt.
+  static String raptDashboardUrl() {
+    final override = dotenv.env['RAPT_DASHBOARD_URL'];
+    if (override != null && override.isNotEmpty) return override;
+    if (_isLocalHost()) return 'http://localhost:8082';
+    return 'https://rapt.${_baseDomain()}';
+  }
+
   /// Supabase Anon Key — bleibt build-time aus dem .env Asset.
   static String supabaseAnonKey() => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 }
