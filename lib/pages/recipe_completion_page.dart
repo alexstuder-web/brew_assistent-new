@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'dart:convert';
+import 'dart:typed_data';
 import '../services/user_profile_service.dart';
 import '../services/fermenter_service.dart';
 
@@ -217,16 +218,22 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
     if (_processedBase64Image != null || _generatedImageUrl == null) return;
 
     try {
-      final urlToFetch = '${_openAIService.proxyBaseUrl}/proxy-image?url=${Uri.encodeComponent(_generatedImageUrl!)}';
-      final response = await http.get(Uri.parse(urlToFetch));
-      
-      if (response.statusCode == 200) {
-        final image = img.decodeImage(response.bodyBytes);
-        if (image != null) {
-          final resized = img.copyResize(image, width: 256);
-          final jpg = img.encodeJpg(resized, quality: 65);
-          _processedBase64Image = base64Encode(jpg);
-        }
+      Uint8List bytes;
+      if (_generatedImageUrl!.startsWith('data:')) {
+        final idx = _generatedImageUrl!.indexOf(',');
+        bytes = base64Decode(_generatedImageUrl!.substring(idx + 1));
+      } else {
+        final urlToFetch = '${_openAIService.proxyBaseUrl}/proxy-image?url=${Uri.encodeComponent(_generatedImageUrl!)}';
+        final response = await http.get(Uri.parse(urlToFetch));
+        if (response.statusCode != 200) return;
+        bytes = response.bodyBytes;
+      }
+
+      final image = img.decodeImage(bytes);
+      if (image != null) {
+        final resized = img.copyResize(image, width: 256);
+        final jpg = img.encodeJpg(resized, quality: 65);
+        _processedBase64Image = base64Encode(jpg);
       }
     } catch (e) {
       debugPrint('Image processing failed: $e');
@@ -339,9 +346,11 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
                         color: Colors.black26,
                         border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.3)),
                       ),
-                  child: _generatedImageUrl != null 
+                  child: _generatedImageUrl != null
                     ? Image.network(
-                        '${_openAIService.proxyBaseUrl}/proxy-image?url=${Uri.encodeComponent(_generatedImageUrl!)}',
+                        _generatedImageUrl!.startsWith('data:')
+                            ? _generatedImageUrl!
+                            : '${_openAIService.proxyBaseUrl}/proxy-image?url=${Uri.encodeComponent(_generatedImageUrl!)}',
                         fit: BoxFit.contain,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
