@@ -1,45 +1,53 @@
-# AiBrewGenius 🍺
+# brew_assistent (AiBrewGenius)
 
-Ein kleines Flutter-Projekt, das jetzt als AiBrewGenius individuelle Bierrezepte über die OpenAI API generiert. Die App läuft auf Android, iOS und im Web und bietet eine Eingabemaske für einen Prompt sowie die Darstellung der erzeugten Antwort.
+Flutter-Web-App: AI-Bierrezepte über OpenAI + Persistenz in Supabase
+(Schema `aibrewgenius`). Frontend ruft den `api-proxy` aus
+[`brew-proxy-new`](https://github.com/alexstuder-web/brew-proxy-new) auf —
+der hält den OpenAI-Key serverseitig.
 
-## Voraussetzungen
+## Status: Source-Repo
 
-- Flutter SDK (≥ 3.4)  
-- Für iOS: Xcode & CocoaPods  
-- Für Android: Android Studio oder die Android command-line tools  
-- Ein gültiger OpenAI API Key
+Dieses Repo ist **nur Source**. Auf `push main` baut GitHub Actions ein
+Container-Image und pusht es zu Docker Hub:
 
-## Projekt einrichten
+```
+${DOCKERHUB_USERNAME}/web_assistent:latest
+```
+
+**Production-Deployment läuft via** [`webPage_infra`](https://github.com/alexstuder-web/webPage_infra) — dort wird das Image
+gezogen und neben dem Supabase-Stack gestartet. Watchtower aktualisiert
+den Container alle 5 Min automatisch.
+
+Image-Definition: siehe [`Dockerfile`](Dockerfile) (Nginx + Flutter-Web-Build).
+
+## Lokales Dev
 
 ```bash
-cd flutter_brew_assistent
-cp .env.example .env
-# .env anpassen und den eigenen API-Key hinterlegen
-
+cp .env.example .env       # PROXY_URL + SUPABASE_URL anpassen
 flutter pub get
-```
-
-## App starten
-
-```bash
-# Web
 flutter run -d chrome
-
-# iOS (Simulator)
-flutter run -d ios
-
-# Android (Emulator)
-flutter run -d android
 ```
+
+Für lokales Testen gegen den **vollen Stack** (Supabase + Proxy + Web) →
+`docker-compose.dev.yml` im `webPage_infra` Repo nutzen.
 
 ## Architektur
 
-- `lib/main.dart`: UI + Stateful Widget für Prompt-Eingabe und Ergebnisanzeige  
-- `lib/services/openai_service.dart`: Einfache Service-Klasse, die die Chat Completions API (`gpt-4o-mini`) anspricht  
-- `.env`: wird über `flutter_dotenv` geladen, um den OpenAI-Schlüssel nicht ins Repo einzuchecken
+| Bereich | Pfad |
+|---|---|
+| App-Entry | `lib/main.dart` |
+| OpenAI-Service | `lib/services/openai_service.dart` |
+| Supabase-Client | `lib/services/recipe_repository.dart` |
+| DB-Schema | `db_scripts/full/001_init_schema.sql` (manuell ausführen via Studio) |
+| Currently-Brewing-Button | öffnet RAPT-Dashboard in neuem Tab (URL aus `EnvConfig.raptDashboardUrl()`) |
 
-## Sicherheitshinweis
+## Sicherheit
 
-Der OpenAI-Key darf niemals eingecheckt oder clientseitig offengelegt werden. Für produktive Apps empfiehlt sich ein Proxy-Backend, das die Anfrage serverseitig proxy’t und den Key schützt.
+OpenAI-Key bleibt im `brew-proxy` — niemals im Flutter-Bundle. `PROXY_URL`
+zeigt auf den `api-proxy`-Container.
 
-Viel Spaß beim Experimentieren und Prost! 🍻
+## Verwandte Repos
+
+- [`webPage_infra`](https://github.com/alexstuder-web/webPage_infra) — Production-Compose + Bootstrap
+- [`brew-proxy-new`](https://github.com/alexstuder-web/brew-proxy-new) — OpenAI/RAPT/Brewfather-Proxy
+- [`RAPT_Brewing_Dashboard-new`](https://github.com/alexstuder-web/RAPT_Brewing_Dashboard-new) — Echtzeit Fermentation Dashboard
