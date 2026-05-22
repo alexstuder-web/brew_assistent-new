@@ -12,45 +12,40 @@ class GeneratedRecipesListPage extends StatefulWidget {
 
 class _GeneratedRecipesListPageState extends State<GeneratedRecipesListPage> {
   final _supabase = Supabase.instance.client;
+  late Future<List<Map<String, dynamic>>> _recipesFuture;
 
-  Stream<List<Map<String, dynamic>>> _recipesStream() {
-    return _supabase.schema('aibrewgenius').from('ai_generated_recipes_v2').stream(primaryKey: ['id']).order('created_at', ascending: false).map((recipes) {
-       // Since stream() doesn't support deep joins easily with realtime, we might need to fetch details on demand or accept that we only have the main table first.
-       // However, the user wants the list. The list mainly needs the name and style.
-       // The details are fetched on Tap? No, the OnTap logic I wrote assumes 'row' has everything.
-       // Supabase 'stream' does NOT support joins. It only listens to one table.
-       // We must switch to a FutureBuilder with standard .select() or accept that fetching details happens on Tap.
-       // Given the constraint "modify stream builder logic", I will assume we switch to FutureBuilder or simple One-Shot query for now, OR fetch details in the OnTap.
-       // BUT, the previous code structure uses StreamBuilder. To keep it responding to changes, I should keep StreamBuilder BUT 'stream' limitation is real.
-       // actually, let's just create a Future that fetches EVERYTHING.
-       // Wait, the user wants to see the list.
-       // Let's change this to use .select() which is a Future, not a Stream, OR just fetch the ID and Name for the list, and fetch full details when clicking.
-       // BUT my previous edit was inside the ListView builder assuming 'row' has the data.
-       
-       // Correct approach for "No View" and "Complex Data":
-       // The list only needs name/style/date.
-       // The DETAIL (On Tap) needs everything.
-       return recipes;
+  @override
+  void initState() {
+    super.initState();
+    _recipesFuture = _fetchRecipes();
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchRecipes() async {
+    final result = await _supabase
+        .schema('aibrewgenius')
+        .from('ai_generated_recipes_v2')
+        .select('id, basis_bier, bier_typ, created_at')
+        .order('created_at', ascending: false);
+    return List<Map<String, dynamic>>.from(result);
+  }
+
+  void _reload() {
+    setState(() {
+      _recipesFuture = _fetchRecipes();
     });
   }
-  
-  // Actually, I need to fetch the full data ON CLICK if I can't get it in the stream.
-  // The 'row' in ListView right now only comes from 'ai_generated_recipes' table stream. It WON'T have the joined tables.
-  // So my OnTap logic will fail because row['ai_recipe_malts'] will be null.
-  
-  // I need to fetch the full recipe in OnTap.
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Generierte Rezepte')),
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: _recipesStream(),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _recipesFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Fehler: ${snapshot.error}'));
           }
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
           final recipes = snapshot.data!;
@@ -96,6 +91,7 @@ class _GeneratedRecipesListPageState extends State<GeneratedRecipesListPage> {
                         if (confirm == true) {
                           try {
                             await _supabase.schema('aibrewgenius').from('ai_generated_recipes_v2').delete().eq('id', row['id']);
+                            _reload();
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Rezept gelöscht.')),
