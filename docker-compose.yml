@@ -5,10 +5,12 @@
 # Standalone:  cd brew_assistent-new && docker compose up -d
 # Orchestriert: webPage_infra/docker-compose.yml zieht diese Datei via `include:`
 #
+# RAPT-Dashboard ist KEIN Teil dieses Stacks — es läuft zentral (deployt via
+# webPage_infra) und wird per "Currently Brewing"-Button in neuem Tab geöffnet.
+# URL kommt aus EnvConfig.raptDashboardUrl() / .env RAPT_DASHBOARD_URL.
+#
 # Secrets: kommen aus .env (gitignored). Generieren: scripts/generate-supabase-secrets.sh
 # DB-Schema: db_scripts/full/*.sql wird beim ersten Start automatisch ausgeführt.
-
-name: brewassistent
 
 services:
 
@@ -174,7 +176,7 @@ services:
   # --------------------------------------------------------------------------
   supabase-meta:
     container_name: supabase-meta
-    image: supabase/postgres-meta:v0.89.3
+    image: supabase/postgres-meta:v0.96.3
     depends_on:
       supabase-db:
         condition: service_healthy
@@ -186,6 +188,7 @@ services:
       PG_META_DB_NAME: postgres
       PG_META_DB_USER: supabase_admin
       PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      CRYPTO_KEY: ${PG_META_CRYPTO_KEY}
     networks:
       - assistent_net
 
@@ -194,7 +197,7 @@ services:
   # --------------------------------------------------------------------------
   supabase-studio:
     container_name: supabase-studio
-    image: supabase/studio:latest
+    image: supabase/studio:2026.04.27-sha-5f60601
     depends_on:
       supabase-meta:
         condition: service_started
@@ -202,8 +205,15 @@ services:
     ports:
       - "${STUDIO_PORT:-54323}:3000"
     environment:
+      # IPv4 binding — sonst kriegt Healthcheck ECONNREFUSED auf 127.0.0.1.
+      HOSTNAME: "0.0.0.0"
       STUDIO_PG_META_URL: http://supabase-meta:8080
+      # Direct-DB-Zugriff für Studio (zusätzlich zu Meta).
+      POSTGRES_HOST: supabase-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_META_CRYPTO_KEY: ${PG_META_CRYPTO_KEY}
       DEFAULT_ORGANIZATION_NAME: ${DEFAULT_ORGANIZATION_NAME:-Brewing}
       DEFAULT_PROJECT_NAME: ${DEFAULT_PROJECT_NAME:-aibrewgenius}
       SUPABASE_URL: http://supabase-kong:8000
@@ -213,6 +223,10 @@ services:
       AUTH_JWT_SECRET: ${JWT_SECRET}
       DASHBOARD_USERNAME: ${DASHBOARD_USERNAME:-supabase}
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
+      # Pflicht-Vars seit Next.js-16-Studio-Builds, auch wenn wir keine
+      # Edge Functions / Snippets-Persistierung nutzen.
+      EDGE_FUNCTIONS_MANAGEMENT_FOLDER: /tmp/edge-functions
+      SNIPPETS_MANAGEMENT_FOLDER: /tmp/snippets
     networks:
       - assistent_net
 
