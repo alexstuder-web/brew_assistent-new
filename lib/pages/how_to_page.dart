@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/how_to_topic.dart';
 import '../services/how_to_service.dart';
+import '../services/user_profile_service.dart';
 import 'how_to/how_to_sidebar.dart';
 import 'how_to/how_to_tab_bar.dart';
 import 'how_to/how_to_editor.dart';
@@ -25,7 +26,7 @@ class _HowToPageState extends State<HowToPage> {
   final _pageContentController = TextEditingController();
   
   double _sidebarWidth = 250.0;
-  final _profileId = 'self_hosted_profile';
+  String get _profileId => UserProfileService.currentUserId;
 
   @override
   void initState() {

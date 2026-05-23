@@ -24,7 +24,7 @@ class _BrewfatherDataPageState extends State<BrewfatherDataPage> {
   @override
   void initState() {
     super.initState();
-    _service = BrewfatherService(userId: widget.userId, apiKey: widget.apiKey);
+    _service = BrewfatherService();
     _loadData();
   }
 

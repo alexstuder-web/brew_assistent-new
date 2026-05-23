@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'discovery_welcome_page.dart';
 import 'user_profile_page.dart';
@@ -13,6 +14,10 @@ class BrewEntryPage extends StatelessWidget {
 
   void _openRoute(BuildContext context, String route) {
     Navigator.of(context).pushNamed(route);
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    await Supabase.instance.client.auth.signOut();
   }
 
   Future<void> _openStudio(BuildContext context) async {
@@ -56,6 +61,12 @@ class BrewEntryPage extends StatelessWidget {
                     height: 49,
                     filterQuality: FilterQuality.none,
                     semanticLabel: 'AiBrewGenius',
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    tooltip: 'Abmelden',
+                    onPressed: () => _signOut(context),
                   ),
                 ],
               ),

@@ -54,10 +54,7 @@ class _RecipesListPageState extends State<RecipesListPage> {
         }
       }
 
-      final bfService = BrewfatherService(
-        userId: profile.brewfatherUserId!,
-        apiKey: profile.brewfatherApiKey!,
-      );
+      final bfService = BrewfatherService();
 
       // 2. Fetch
       final bfData = await bfService.getRecipes();

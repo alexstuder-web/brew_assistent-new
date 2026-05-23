@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'utils/env_config.dart';
+import 'widgets/auth_gate.dart';
 import 'pages/user_profile_page.dart';
 import 'pages/recipe_prompt_page.dart';
 import 'pages/brew_entry_page.dart';
@@ -33,11 +34,9 @@ Future<void> main() async {
     postgrestOptions: const PostgrestClientOptions(schema: 'aibrewgenius'),
   );
 
-  final profileService = UserProfileService();
-  final profile = await profileService.fetchDefaultProfile();
-  final initialLocale = Locale(profile?.language ?? 'de');
-
-  runApp(BrewMateApp(initialLocale: initialLocale));
+  // Pre-auth: kein Profil-Fetch (RLS blockt). Locale 'de' als Default,
+  // Profil-Sprache greift erst nach Login (Profile-Page setzt sie um).
+  runApp(const BrewMateApp(initialLocale: Locale('de')));
 }
 
 class BrewMateApp extends StatefulWidget {
@@ -136,7 +135,8 @@ class _BrewMateAppState extends State<BrewMateApp> {
         DiscoveryWelcomePage.routeName: (_) => const DiscoveryWelcomePage(),
         RecipePromptPage.routeName: (_) => const RecipePromptPage(),
       },
-      builder: (context, child) => child ?? const SizedBox.shrink(),
+      builder: (context, child) =>
+          AuthGate(signedIn: child ?? const SizedBox.shrink()),
     );
   }
 }

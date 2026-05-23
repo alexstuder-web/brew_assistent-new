@@ -44,37 +44,32 @@ class UserProfileService implements UserProfileRepository {
 
   static const String _tableName = 'user_profiles';
   static const String _schemaName = 'aibrewgenius';
-  static const String defaultProfileId = 'self_hosted_profile';
-  static Future<UserProfile?>? _cachedDefaultProfile;
+
+  /// UUID des aktuell eingeloggten Users. Wirft, wenn keine Session existiert.
+  /// AuthGate stellt sicher, dass innerhalb der App immer ein User da ist.
+  static String get currentUserId {
+    final id = Supabase.instance.client.auth.currentUser?.id;
+    if (id == null) {
+      throw StateError('Kein eingeloggter User — currentUserId nicht verfügbar.');
+    }
+    return id;
+  }
 
   @override
   Future<void> saveProfile(UserProfile profile) async {
-    await _table()
-        .upsert(profile.toJson(), onConflict: 'id');
-    if (profile.id == defaultProfileId) {
-      _cachedDefaultProfile = Future.value(profile);
-    }
+    await _table().upsert(profile.toJson(), onConflict: 'id');
   }
 
   @override
   Future<UserProfile?> fetchProfile(String id) async {
-    final data =
-        await _table().select().eq('id', id).maybeSingle();
+    final data = await _table().select().eq('id', id).maybeSingle();
     if (data == null) return null;
-    final profile = UserProfile.fromJson(data);
-    if (id == defaultProfileId) {
-      _cachedDefaultProfile = Future.value(profile);
-    }
-    return profile;
+    return UserProfile.fromJson(data);
   }
 
   @override
-  Future<UserProfile?> fetchDefaultProfile({bool refresh = false}) {
-    if (refresh || _cachedDefaultProfile == null) {
-      _cachedDefaultProfile = fetchProfile(defaultProfileId);
-    }
-    return _cachedDefaultProfile!;
-  }
+  Future<UserProfile?> fetchDefaultProfile({bool refresh = false}) =>
+      fetchProfile(currentUserId);
 
   @override
   Future<List<Fermentable>> getFermentables(String userProfileId) =>

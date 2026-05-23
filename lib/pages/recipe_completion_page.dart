@@ -96,7 +96,7 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
   }
 
   Future<void> _saveRecipeNormalized() async {
-    const userId = 'self_hosted_profile';
+    final userId = UserProfileService.currentUserId;
     final r = widget.recipe;
     final client = Supabase.instance.client;
 
@@ -252,7 +252,7 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
       authorName = profile?.name;
       
       final fermenterService = FermenterService();
-      final fermenters = await fermenterService.fetchFermenters(UserProfileService.defaultProfileId);
+      final fermenters = await fermenterService.fetchFermenters(UserProfileService.currentUserId);
       final defaultFermenter = fermenters.where((f) => f.isDefault).firstOrNull ?? fermenters.firstOrNull;
       isPressure = defaultFermenter?.canPressurize;
     } catch (_) {}

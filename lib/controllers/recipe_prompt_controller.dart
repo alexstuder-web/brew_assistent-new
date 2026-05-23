@@ -74,7 +74,7 @@ class RecipePromptController extends ChangeNotifier {
 
       try {
         final packagingService = PackagingProfileService();
-        final profiles = await packagingService.fetchProfiles(UserProfileService.defaultProfileId);
+        final profiles = await packagingService.fetchProfiles(UserProfileService.currentUserId);
         foundDefaultPackaging = profiles.any((p) => p.isDefault);
         
         final defaultProfile = profiles.firstWhere(
@@ -140,7 +140,7 @@ class RecipePromptController extends ChangeNotifier {
       String brewingEquipmentInfo = 'Kein spezifisches Equipment angegeben.';
       try {
         final kettleService = BrewKettleService();
-        final kettles = await kettleService.fetchKettles(UserProfileService.defaultProfileId);
+        final kettles = await kettleService.fetchKettles(UserProfileService.currentUserId);
         foundDefaultKettle = kettles.any((k) => k.isDefault);
         if (kettles.isNotEmpty) {
           defaultKettle = kettles.firstWhere((k) => k.isDefault, orElse: () => kettles.first);
@@ -154,7 +154,7 @@ class RecipePromptController extends ChangeNotifier {
       String fermenterInfo = 'Kein spezifischer Fermenter angegeben.';
       try {
         final fermenterService = FermenterService();
-        final fermenters = await fermenterService.fetchFermenters(UserProfileService.defaultProfileId);
+        final fermenters = await fermenterService.fetchFermenters(UserProfileService.currentUserId);
         foundDefaultFermenter = fermenters.any((f) => f.isDefault);
         if (fermenters.isNotEmpty) {
           defaultFermenter = fermenters.firstWhere((f) => f.isDefault, orElse: () => fermenters.first);
@@ -174,7 +174,7 @@ class RecipePromptController extends ChangeNotifier {
       String finingAgentsInfo = 'Keine verfügbaren Schönungsmittel im Profil.';
       try {
         final finingService = FiningAgentsService();
-        final settings = await finingService.fetchSettings(UserProfileService.defaultProfileId);
+        final settings = await finingService.fetchSettings(UserProfileService.currentUserId);
         
         final available = <String>[];
         if (settings.irishMoss) available.add('Irish Moss (Kochen)');
@@ -196,7 +196,7 @@ class RecipePromptController extends ChangeNotifier {
       String yeastInventoryInfo = 'Keine Hefe im Bestand gefunden.';
       try {
         final yeastService = YeastBankService();
-        final entries = await yeastService.fetchEntries(UserProfileService.defaultProfileId);
+        final entries = await yeastService.fetchEntries(UserProfileService.currentUserId);
         if (entries.isNotEmpty) {
           yeastInventoryInfo = entries.map((y) {
             String s = '- ${y.brand} ${y.strain}';

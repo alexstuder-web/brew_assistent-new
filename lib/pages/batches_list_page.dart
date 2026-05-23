@@ -54,10 +54,7 @@ class _BatchesListPageState extends State<BatchesListPage> {
         }
       }
 
-      final bfService = BrewfatherService(
-        userId: profile.brewfatherUserId!,
-        apiKey: profile.brewfatherApiKey!,
-      );
+      final bfService = BrewfatherService();
 
       // 2. Fetch
       final bfData = await bfService.getBatches();

@@ -57,9 +57,7 @@ class _YeastBankEditorPageState extends State<YeastBankEditorPage> {
           widget.userProfile?.brewfatherApiKey != null) {
         if (saved.brewfatherId != null) {
           try {
-            final bfService = BrewfatherService(
-                userId: widget.userProfile!.brewfatherUserId!,
-                apiKey: widget.userProfile!.brewfatherApiKey!);
+            final bfService = BrewfatherService();
             await bfService.updateInventoryYeast(saved.brewfatherId!, {
               'name': saved.strain,
               'lab': saved.brand,

@@ -24,7 +24,7 @@ class UserProfileController extends ChangeNotifier {
   String? userNameError;
   UserProfile? loadedProfile;
 
-  static const String profileId = UserProfileService.defaultProfileId;
+  static String get profileId => UserProfileService.currentUserId;
 
   UserProfileController({UserProfileRepository? repository})
       : profileRepository = repository ?? UserProfileService() {

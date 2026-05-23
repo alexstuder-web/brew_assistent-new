@@ -53,10 +53,7 @@ class _MiscsManagerPageState extends State<MiscsManagerPage> {
          }
       }
 
-      final bfService = BrewfatherService(
-        userId: profile.brewfatherUserId!,
-        apiKey: profile.brewfatherApiKey!,
-      );
+      final bfService = BrewfatherService();
 
       // 2. Fetch from Brewfather
       final bfData = await bfService.getMiscs();
@@ -457,10 +454,7 @@ class _MiscsManagerPageState extends State<MiscsManagerPage> {
            throw Exception('Fehlende Brewfather Zugangsdaten.');
         }
 
-        final bfService = BrewfatherService(
-          userId: profile.brewfatherUserId!,
-          apiKey: profile.brewfatherApiKey!,
-        );
+        final bfService = BrewfatherService();
 
         if (item.brewfatherId == null) throw Exception('Keine Brewfather ID vorhanden.');
 

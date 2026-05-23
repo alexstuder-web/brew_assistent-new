@@ -54,10 +54,7 @@ class _HopsManagerPageState extends State<HopsManagerPage> {
         }
       }
 
-      final bfService = BrewfatherService(
-        userId: profile.brewfatherUserId!,
-        apiKey: profile.brewfatherApiKey!,
-      );
+      final bfService = BrewfatherService();
 
       // 2. Fetch from Brewfather
       final bfData = await bfService.getHops();
@@ -424,10 +421,7 @@ class _HopsManagerPageState extends State<HopsManagerPage> {
            throw Exception('Fehlende Brewfather Zugangsdaten.');
         }
 
-        final bfService = BrewfatherService(
-          userId: profile.brewfatherUserId!,
-          apiKey: profile.brewfatherApiKey!,
-        );
+        final bfService = BrewfatherService();
 
         if (item.brewfatherId == null) throw Exception('Keine Brewfather ID vorhanden.');
 

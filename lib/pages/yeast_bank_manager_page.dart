@@ -82,9 +82,7 @@ class _YeastBankManagerPageState extends State<YeastBankManagerPage> {
       return;
     }
     try {
-      final bfService = BrewfatherService(
-          userId: _userProfile!.brewfatherUserId!,
-          apiKey: _userProfile!.brewfatherApiKey!);
+      final bfService = BrewfatherService();
       final inventory = await bfService.getInventory();
       final yeasts = inventory['yeasts'] ?? [];
 

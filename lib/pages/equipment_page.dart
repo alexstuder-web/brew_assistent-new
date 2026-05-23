@@ -62,7 +62,7 @@ class _EquipmentPageState extends State<EquipmentPage> {
   final TextEditingController batchSizeCtrl = TextEditingController();
   final FocusNode batchSizeFocusNode = FocusNode();
 
-  static const String profileId = UserProfileService.defaultProfileId;
+  static String get profileId => UserProfileService.currentUserId;
   static const Map<String, Map<String, String>> finingMetadata = {
     'irish_moss': {
       'name': 'Irish Moss',

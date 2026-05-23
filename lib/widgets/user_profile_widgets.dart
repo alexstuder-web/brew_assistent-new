@@ -210,7 +210,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.kitchen,
               label: AppLocalizations.of(context)!.keezer,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const KeezerManagerPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => KeezerManagerPage(profileId: UserProfileController.profileId)),
               ),
             ),
             _managerButton(
@@ -258,7 +258,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.video_library_outlined,
               label: AppLocalizations.of(context)!.videoInstructions,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const VideoInstructionsPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => VideoInstructionsPage(profileId: UserProfileController.profileId)),
               ),
             ),
           ],
@@ -281,7 +281,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.extension_outlined,
               label: AppLocalizations.of(context)!.integrations,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const IntegrationsPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => IntegrationsPage(profileId: UserProfileController.profileId)),
               ),
             ),
             _managerButton(
@@ -289,7 +289,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.cloud_download_outlined,
               label: AppLocalizations.of(context)!.brewfather,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const BrewfatherMenuPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => BrewfatherMenuPage(profileId: UserProfileController.profileId)),
               ),
               customIcon: Image.asset(
                 'assets/Brewfather_logo.png',
@@ -318,7 +318,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.grass_outlined,
               label: AppLocalizations.of(context)!.hops,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const HopsManagerPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => HopsManagerPage(profileId: UserProfileController.profileId)),
               ),
             ),
             _managerButton(
@@ -326,7 +326,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.category_outlined,
               label: AppLocalizations.of(context)!.miscs,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MiscsManagerPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => MiscsManagerPage(profileId: UserProfileController.profileId)),
               ),
             ),
             _managerButton(
@@ -334,7 +334,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.menu_book,
               label: AppLocalizations.of(context)!.recipes,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const RecipesListPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => RecipesListPage(profileId: UserProfileController.profileId)),
               ),
             ),
             _managerButton(
@@ -342,7 +342,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.history_edu,
               label: AppLocalizations.of(context)!.batches,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const BatchesListPage(profileId: UserProfileController.profileId)),
+                MaterialPageRoute(builder: (_) => BatchesListPage(profileId: UserProfileController.profileId)),
               ),
             ),
           ],

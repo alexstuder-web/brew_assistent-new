@@ -76,8 +76,7 @@ class FermentingController extends ChangeNotifier {
         throw Exception('Keine RAPT Zugangsdaten im Profil.');
       }
 
-      final service = RaptService(
-          userId: profile.raptUserId!, apiKey: profile.raptApiKey!);
+      final service = RaptService();
 
       if (_hydrometerId == null) {
         final hydrometers = await service.getHydrometers();

@@ -99,7 +99,7 @@ class _OverviewTabState extends State<_OverviewTab> {
   Future<WaterProfile?> _fetchSource() async {
      try {
        final service = WaterProfileService();
-       final profiles = await service.fetchProfiles(UserProfileService.defaultProfileId);
+       final profiles = await service.fetchProfiles(UserProfileService.currentUserId);
        if (profiles.isNotEmpty) {
            return profiles.firstWhere((p) => p.isDefault, orElse: () => profiles.first);
        }

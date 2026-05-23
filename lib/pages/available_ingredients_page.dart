@@ -59,10 +59,7 @@ class _AvailableIngredientsPageState extends State<AvailableIngredientsPage> {
         }
       }
 
-      final bfService = BrewfatherService(
-        userId: profile.brewfatherUserId!,
-        apiKey: profile.brewfatherApiKey!,
-      );
+      final bfService = BrewfatherService();
 
       // 2. Fetch from Brewfather
       final bfData = await bfService.getFermentables();
@@ -435,10 +432,7 @@ class _AvailableIngredientsPageState extends State<AvailableIngredientsPage> {
            throw Exception('Fehlende Brewfather Zugangsdaten.');
         }
 
-        final bfService = BrewfatherService(
-          userId: profile.brewfatherUserId!,
-          apiKey: profile.brewfatherApiKey!,
-        );
+        final bfService = BrewfatherService();
 
         if (item.brewfatherId == null) throw Exception('Keine Brewfather ID vorhanden.');
 
