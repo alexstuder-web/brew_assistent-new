@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/bf_recipe.dart';
@@ -127,7 +128,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
   }
 
   Future<void> _saveImageBytes(List<int> bytes) async {
-    final updatedRecipe = _recipe.copyWith(image: bytes as dynamic); // cast just in case
+    final updatedRecipe = _recipe.copyWith(image: Uint8List.fromList(bytes));
     
     // Save to DB
     await _userService.saveRecipe(updatedRecipe);
@@ -271,6 +272,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
         child: Image.memory(
           _recipe.image!,
           fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              const Icon(Icons.broken_image, size: 32),
         ),
       );
     }

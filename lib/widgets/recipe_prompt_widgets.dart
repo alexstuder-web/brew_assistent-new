@@ -184,6 +184,8 @@ class ImagePreview extends StatelessWidget {
                     bytes,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.none,
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.broken_image, size: 32),
                   ),
                 );
               },

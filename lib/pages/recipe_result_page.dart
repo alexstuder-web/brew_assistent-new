@@ -105,7 +105,7 @@ class _OverviewTabState extends State<_OverviewTab> {
        }
        return null;
      } catch (e) {
-
+       debugPrint('Water-Profile-Fetch fehlgeschlagen: $e');
        return null;
      }
   }

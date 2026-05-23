@@ -141,6 +141,7 @@ class _BatchesListPageState extends State<BatchesListPage> {
             : '-';
 
         return ListTile(
+          key: ValueKey(item.brewfatherId ?? item.id ?? item.name),
           onTap: () {
              Navigator.of(context).push(
               MaterialPageRoute(

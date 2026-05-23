@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'dart:convert';
-import 'dart:typed_data';
 import '../services/user_profile_service.dart';
 import '../services/fermenter_service.dart';
 
@@ -255,7 +254,9 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
       final fermenters = await fermenterService.fetchFermenters(UserProfileService.currentUserId);
       final defaultFermenter = fermenters.where((f) => f.isDefault).firstOrNull ?? fermenters.firstOrNull;
       isPressure = defaultFermenter?.canPressurize;
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Profil/Fermenter-Fetch fehlgeschlagen: $e');
+    }
 
     setState(() => _isSaving = false);
 

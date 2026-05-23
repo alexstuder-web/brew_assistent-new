@@ -219,6 +219,9 @@ class _AnalysisTabState extends State<AnalysisTab> {
                                 base64Decode(
                                     _analysisPhotos[index].split(',').last),
                                 fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.broken_image,
+                                    size: 32),
                               ),
                             )
                           : Column(
