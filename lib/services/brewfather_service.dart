@@ -37,6 +37,9 @@ class BrewfatherService {
   Future<List<dynamic>> getBatches() async {
     final uri = Uri.parse('$_baseUrl/batches?complete=true&limit=20');
     final response = await http.get(uri, headers: _headers());
+    if (response.statusCode == 429) {
+      throw Exception('Brewfather Rate-Limit erreicht — bitte in ~1 min nochmal versuchen.');
+    }
     if (response.statusCode != 200) {
       throw Exception('Fehler beim Laden der Batches: ${response.statusCode} ${response.body}');
     }
@@ -48,6 +51,9 @@ class BrewfatherService {
       if (id == null) return batch;
       final detailUri = Uri.parse('$_baseUrl/batches/$id');
       final detailRes = await http.get(detailUri, headers: _headers());
+      if (detailRes.statusCode == 429) {
+        throw Exception('Brewfather Rate-Limit erreicht — bitte in ~1 min nochmal versuchen.');
+      }
       if (detailRes.statusCode == 200) {
         return jsonDecode(detailRes.body);
       }
@@ -73,6 +79,9 @@ class BrewfatherService {
     for (final category in categories) {
       final uri = Uri.parse('$_baseUrl/inventory/$category');
       final response = await http.get(uri, headers: _headers());
+      if (response.statusCode == 429) {
+        throw Exception('Brewfather Rate-Limit erreicht — bitte in ~1 min nochmal versuchen.');
+      }
       if (response.statusCode != 200) {
         throw Exception('Fehler beim Laden von $category: ${response.statusCode}');
       }
@@ -83,6 +92,9 @@ class BrewfatherService {
         if (id == null) return item;
         final detailUri = Uri.parse('$_baseUrl/inventory/$category/$id');
         final detailRes = await http.get(detailUri, headers: _headers());
+        if (detailRes.statusCode == 429) {
+          throw Exception('Brewfather Rate-Limit erreicht — bitte in ~1 min nochmal versuchen.');
+        }
         if (detailRes.statusCode == 200) {
           return jsonDecode(detailRes.body);
         }
