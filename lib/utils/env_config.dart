@@ -3,8 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// Runtime-Konfiguration: leitet URLs aus dem aktuellen Hostname ab.
 /// Dasselbe Web-Image läuft so lokal und auf jeder VPS-Domain (.cloud, .ch, ...).
 ///
-/// Lokal      → http://localhost:<port>
-/// VPS        → https://<sub>.<aktuelle-domain>
+/// Lokal      -> http://localhost:[port]
+/// VPS        -> https://[sub].[aktuelle-domain]
 ///
 /// ANON_KEY kann NICHT aus dem Hostname abgeleitet werden (ist ein signiertes JWT
 /// pro Supabase-Instanz). Er kommt weiter aus dem dotenv .env Asset, also
@@ -39,6 +39,17 @@ class EnvConfig {
     if (override != null && override.isNotEmpty) return override;
     if (_isLocalHost()) return 'http://localhost:8082';
     return 'https://rapt.${_baseDomain()}';
+  }
+
+  /// Supabase Studio URL — Dev-Tool, in Production standardmäßig versteckt.
+  /// Lokal: http://localhost:54323
+  /// Override via .env (STUDIO_URL) immer respektiert.
+  /// In non-local OHNE Override: null → UI darf den Button nicht rendern.
+  static String? studioUrl() {
+    final override = dotenv.env['STUDIO_URL'];
+    if (override != null && override.isNotEmpty) return override;
+    if (_isLocalHost()) return 'http://localhost:54323';
+    return null;
   }
 
   /// Supabase Anon Key — bleibt build-time aus dem .env Asset.

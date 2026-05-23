@@ -20,8 +20,8 @@ class BrewEntryPage extends StatelessWidget {
     await Supabase.instance.client.auth.signOut();
   }
 
-  Future<void> _openStudio(BuildContext context) async {
-    final uri = Uri.parse('http://127.0.0.1:54323/');
+  Future<void> _openStudio(BuildContext context, String url) async {
+    final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -42,6 +42,7 @@ class BrewEntryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final studioUrl = EnvConfig.studioUrl();
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -87,11 +88,13 @@ class BrewEntryPage extends StatelessWidget {
                       label: 'Currently Brewing',
                       onPressed: () => _openRaptDashboard(context),
                     ),
-                    const SizedBox(height: 18),
-                    EntryButton(
-                      label: 'Studio',
-                      onPressed: () => _openStudio(context),
-                    ),
+                    if (studioUrl != null) ...[
+                      const SizedBox(height: 18),
+                      EntryButton(
+                        label: 'Studio',
+                        onPressed: () => _openStudio(context, studioUrl),
+                      ),
+                    ],
                     const SizedBox(height: 18),
                     EntryButton(
                       label: 'Start, entdecken wir ein neues Bier',
