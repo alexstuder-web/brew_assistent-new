@@ -10,6 +10,7 @@ class FermentingController extends ChangeNotifier {
 
   final BfBatch batch;
 
+  bool _disposed = false;
   bool _useRaptData = false;
   bool _isLoadingRapt = false;
   List<dynamic> _raptData = [];
@@ -17,6 +18,17 @@ class FermentingController extends ChangeNotifier {
   String? _hydrometerId;
   DateTime? _raptStartDate;
   DateTime? _raptEndDate;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  void _safeNotify() {
+    if (_disposed) return;
+    notifyListeners();
+  }
 
   bool get useRaptData => _useRaptData;
   bool get isLoadingRapt => _isLoadingRapt;
@@ -28,7 +40,7 @@ class FermentingController extends ChangeNotifier {
 
   void setUseRaptData(bool value) {
     _useRaptData = value;
-    notifyListeners();
+    _safeNotify();
   }
 
   void setRaptDates(DateTime? start, DateTime? end) {
@@ -37,7 +49,7 @@ class FermentingController extends ChangeNotifier {
     if (_raptStartDate != null && _raptEndDate != null) {
       loadRaptData();
     } else {
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -66,7 +78,7 @@ class FermentingController extends ChangeNotifier {
 
     _isLoadingRapt = true;
     _raptError = null;
-    notifyListeners();
+    _safeNotify();
 
     try {
       final profile = await UserProfileService().fetchDefaultProfile();
@@ -108,7 +120,7 @@ class FermentingController extends ChangeNotifier {
       _raptError = e.toString();
     } finally {
       _isLoadingRapt = false;
-      notifyListeners();
+      _safeNotify();
     }
   }
 

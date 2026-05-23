@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/bf_recipe.dart';
 import '../services/user_profile_service.dart';
 import '../services/openai_service.dart';
+import '../utils/env_config.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/section_title.dart';
 
@@ -37,41 +38,29 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
     // Check if JSON has img_url
     final jsonImg = _recipe.data['image'] ?? _recipe.data['img_url'];
-    if (jsonImg != null && jsonImg is String && jsonImg.startsWith('http')) {
-      final imgUrl = jsonImg;
+    if (jsonImg == null || jsonImg is! String || !jsonImg.startsWith('http')) {
+      return;
+    }
+    final imgUrl = jsonImg;
 
-      if (!mounted) return;
-      setState(() => _isLoadingImage = true);
+    if (!mounted) return;
+    setState(() => _isLoadingImage = true);
 
-      try {
-        // Try direct fetch first
-        var response = await http.get(Uri.parse(imgUrl));
-        
-        // If direct fetch fails (non-200), or if we are here, we check status.
-        // Note: CORS errors in Web usually throw an exception, so we'll catch 'em below.
-        if (response.statusCode == 200) {
-           await _saveImageBytes(response.bodyBytes);
-           return;
-        }
-      } catch (e) {
-        debugPrint('Direct fetch failed (likely CORS), trying proxy... $e');
+    try {
+      // Route through our own brew-proxy /proxy-image endpoint — no third-party CORS-bypass.
+      final proxyUrl =
+          '${EnvConfig.proxyUrl()}/proxy-image?url=${Uri.encodeComponent(imgUrl)}';
+      final response = await http.get(Uri.parse(proxyUrl));
+
+      if (response.statusCode == 200) {
+        await _saveImageBytes(response.bodyBytes);
+      } else {
+        debugPrint('Proxy image fetch returned ${response.statusCode}');
       }
-
-      // Fallback: Try via CORS proxy
-      // We use a public proxy for this client-side demo workaround. 
-      // In production, you'd use your own backend proxy or Supabase Edge Function.
-      try {
-        final proxyUrl = 'https://api.allorigins.win/raw?url=${Uri.encodeComponent(imgUrl)}';
-        final response = await http.get(Uri.parse(proxyUrl));
-        
-        if (response.statusCode == 200) {
-           await _saveImageBytes(response.bodyBytes);
-           return;
-        }
-      } catch (e) {
-        debugPrint('Proxy fetch failed too: $e');
-      }
-
+    } catch (e) {
+      debugPrint('Proxy image fetch failed: $e');
+    } finally {
+      if (mounted) setState(() => _isLoadingImage = false);
     }
   }
 
@@ -129,14 +118,13 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
   Future<void> _saveImageBytes(List<int> bytes) async {
     final updatedRecipe = _recipe.copyWith(image: Uint8List.fromList(bytes));
-    
+
     // Save to DB
     await _userService.saveRecipe(updatedRecipe);
 
     if (mounted) {
       setState(() {
         _recipe = updatedRecipe;
-        _isLoadingImage = false;
       });
     }
   }

@@ -258,14 +258,13 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
       debugPrint('Profil/Fermenter-Fetch fehlgeschlagen: $e');
     }
 
+    if (!mounted) return;
     setState(() => _isSaving = false);
 
     final finalImage = _processedBase64Image ?? widget.recipe.generatedImage;
-    final recipeToExport = finalImage != null 
+    final recipeToExport = finalImage != null
         ? widget.recipe.copyWith(generatedImage: finalImage)
         : widget.recipe;
-
-    if (!mounted) return;
 
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => JsonExportPage(
@@ -439,19 +438,17 @@ class _RecipeCompletionPageState extends State<RecipeCompletionPage> {
                 try {
                   await _saveRecipeNormalized();
 
-                  if (context.mounted) {
-                    setState(() => _isSaving = false);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Rezept erfolgreich gespeichert!')),
-                    );
-                  }
-                } catch (e) {
+                  if (!context.mounted) return;
                   setState(() => _isSaving = false);
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Fehler beim Speichern: $e')),
-                    );
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Rezept erfolgreich gespeichert!')),
+                  );
+                } catch (e) {
+                  if (!context.mounted) return;
+                  setState(() => _isSaving = false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Fehler beim Speichern: $e')),
+                  );
                 }
               },
             ),
