@@ -72,7 +72,7 @@ class FermentingController extends ChangeNotifier {
       final profile = await UserProfileService().fetchDefaultProfile();
       if (profile == null ||
           (profile.raptUserId ?? '').isEmpty ||
-          (profile.raptApiKey ?? '').isEmpty) {
+          !profile.raptConfigured) {
         throw Exception('Keine RAPT Zugangsdaten im Profil.');
       }
 

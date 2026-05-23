@@ -13,8 +13,8 @@ class BrewfatherMenuPage extends StatelessWidget {
     return UserProfileService().fetchProfile(profileId);
   }
 
-  void _navigateToData(BuildContext context, String dataType, String userId, String apiKey) {
-    if (userId.isEmpty || apiKey.isEmpty) {
+  void _navigateToData(BuildContext context, String dataType, String userId, bool configured) {
+    if (userId.isEmpty || !configured) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Bitte erst Brewfather User ID und API Key in den Einstellungen hinterlegen.')),
       );
@@ -22,7 +22,7 @@ class BrewfatherMenuPage extends StatelessWidget {
     }
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => BrewfatherDataPage(userId: userId, apiKey: apiKey, dataType: dataType),
+        builder: (_) => BrewfatherDataPage(dataType: dataType),
       ),
     );
   }
@@ -39,13 +39,13 @@ class BrewfatherMenuPage extends StatelessWidget {
            }
            final profile = snapshot.data;
            final userId = profile?.brewfatherUserId ?? '';
-           final apiKey = profile?.brewfatherApiKey ?? '';
+           final configured = profile?.brewfatherConfigured ?? false;
 
            return Center(
              child: Column(
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
-                 if (userId.isEmpty || apiKey.isEmpty)
+                 if (userId.isEmpty || !configured)
                    Padding(
                      padding: const EdgeInsets.all(16.0),
                      child: Column(
@@ -74,19 +74,19 @@ class BrewfatherMenuPage extends StatelessWidget {
                  _MenuButton(
                    label: 'Read Recipes',
                    icon: Icons.menu_book,
-                   onPressed: () => _navigateToData(context, 'recipes', userId, apiKey),
+                   onPressed: () => _navigateToData(context, 'recipes', userId, configured),
                  ),
                  const SizedBox(height: 16),
                  _MenuButton(
                    label: 'Read Batches',
                    icon: Icons.batch_prediction,
-                   onPressed: () => _navigateToData(context, 'batches', userId, apiKey),
+                   onPressed: () => _navigateToData(context, 'batches', userId, configured),
                  ),
                  const SizedBox(height: 16),
                  _MenuButton(
                    label: 'Read Inventory',
                    icon: Icons.inventory,
-                   onPressed: () => _navigateToData(context, 'inventory', userId, apiKey),
+                   onPressed: () => _navigateToData(context, 'inventory', userId, configured),
                  ),
                ],
              ),

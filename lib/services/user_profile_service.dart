@@ -71,6 +71,21 @@ class UserProfileService implements UserProfileRepository {
   Future<UserProfile?> fetchDefaultProfile({bool refresh = false}) =>
       fetchProfile(currentUserId);
 
+  /// Setzt oder löscht den Brewfather-API-Key über die Vault-RPC.
+  /// [apiKey] null oder leer -> Secret wird gelöscht, `brewfather_configured` -> false.
+  Future<void> setBrewfatherApiKey(String? apiKey) async {
+    await _client
+        .schema(_schemaName)
+        .rpc('set_my_brewfather_creds', params: {'p_api_key': apiKey});
+  }
+
+  /// Setzt oder löscht den RAPT-API-Key über die Vault-RPC.
+  Future<void> setRaptApiKey(String? apiKey) async {
+    await _client
+        .schema(_schemaName)
+        .rpc('set_my_rapt_creds', params: {'p_api_key': apiKey});
+  }
+
   @override
   Future<List<Fermentable>> getFermentables(String userProfileId) =>
       _getItems(_tableFermentables(), userProfileId, Fermentable.fromJson);

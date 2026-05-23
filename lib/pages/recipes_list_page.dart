@@ -45,7 +45,7 @@ class _RecipesListPageState extends State<RecipesListPage> {
       }
 
       if ((profile.brewfatherUserId ?? '').isEmpty ||
-          (profile.brewfatherApiKey ?? '').isEmpty) {
+          !profile.brewfatherConfigured) {
         if (localItems.isEmpty) {
            throw Exception('Bitte hinterlegen Sie erst Ihre Brewfather User ID und API Key.');
         } else {

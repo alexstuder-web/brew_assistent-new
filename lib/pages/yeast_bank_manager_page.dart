@@ -78,7 +78,7 @@ class _YeastBankManagerPageState extends State<YeastBankManagerPage> {
 
   Future<void> _syncWithBrewfather() async {
     if (_userProfile?.brewfatherUserId == null ||
-        _userProfile?.brewfatherApiKey == null) {
+        !(_userProfile?.brewfatherConfigured ?? false)) {
       return;
     }
     try {
@@ -166,7 +166,7 @@ class _YeastBankManagerPageState extends State<YeastBankManagerPage> {
 
     if (value) {
       if ((_userProfile!.brewfatherUserId ?? '').isEmpty ||
-          (_userProfile!.brewfatherApiKey ?? '').isEmpty) {
+          !_userProfile!.brewfatherConfigured) {
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -202,10 +202,11 @@ class _YeastBankManagerPageState extends State<YeastBankManagerPage> {
       avatarBlob: _userProfile!.avatarBlob,
       defaultBatchLiters: _userProfile!.defaultBatchLiters,
       raptUserId: _userProfile!.raptUserId,
-      raptApiKey: _userProfile!.raptApiKey,
       brewfatherUserId: _userProfile!.brewfatherUserId,
-      brewfatherApiKey: _userProfile!.brewfatherApiKey,
       brewfatherSyncEnabled: value,
+      brewfatherConfigured: _userProfile!.brewfatherConfigured,
+      raptConfigured: _userProfile!.raptConfigured,
+      language: _userProfile!.language,
     );
 
     await _userService.saveProfile(updated);

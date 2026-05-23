@@ -46,7 +46,7 @@ class _AvailableIngredientsPageState extends State<AvailableIngredientsPage> {
       }
 
       if ((profile.brewfatherUserId ?? '').isEmpty ||
-          (profile.brewfatherApiKey ?? '').isEmpty) {
+          !profile.brewfatherConfigured) {
         // Only throw if we have no local data either? 
         // Or just warn? Let's keep it as is for now, blocking if no creds.
         if (localItems.isEmpty) {
@@ -428,7 +428,7 @@ class _AvailableIngredientsPageState extends State<AvailableIngredientsPage> {
 
       try {
         final profile = await _userService.fetchProfile(widget.profileId);
-        if (profile == null || (profile.brewfatherUserId ?? '').isEmpty || (profile.brewfatherApiKey ?? '').isEmpty) {
+        if (profile == null || (profile.brewfatherUserId ?? '').isEmpty || !profile.brewfatherConfigured) {
            throw Exception('Fehlende Brewfather Zugangsdaten.');
         }
 

@@ -54,7 +54,7 @@ class _YeastBankEditorPageState extends State<YeastBankEditorPage> {
 
       if (widget.syncEnabled &&
           widget.userProfile?.brewfatherUserId != null &&
-          widget.userProfile?.brewfatherApiKey != null) {
+          (widget.userProfile?.brewfatherConfigured ?? false)) {
         if (saved.brewfatherId != null) {
           try {
             final bfService = BrewfatherService();

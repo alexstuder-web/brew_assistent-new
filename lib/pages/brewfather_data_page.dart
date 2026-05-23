@@ -4,13 +4,9 @@ import '../services/brewfather_service.dart';
 class BrewfatherDataPage extends StatefulWidget {
   const BrewfatherDataPage({
     super.key,
-    required this.userId,
-    required this.apiKey,
     required this.dataType, // 'recipes', 'batches', 'inventory'
   });
 
-  final String userId;
-  final String apiKey;
   final String dataType;
 
   @override

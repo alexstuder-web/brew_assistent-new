@@ -81,10 +81,10 @@ class UserProfileController extends ChangeNotifier {
       avatarBlob: newAvatarBase64 ?? loadedProfile?.avatarBlob,
       defaultBatchLiters: defaultBatch,
       raptUserId: loadedProfile?.raptUserId,
-      raptApiKey: loadedProfile?.raptApiKey,
       brewfatherUserId: loadedProfile?.brewfatherUserId,
-      brewfatherApiKey: loadedProfile?.brewfatherApiKey,
       brewfatherSyncEnabled: loadedProfile?.brewfatherSyncEnabled ?? false,
+      brewfatherConfigured: loadedProfile?.brewfatherConfigured ?? false,
+      raptConfigured: loadedProfile?.raptConfigured ?? false,
       language: selectedLanguage,
     );
 

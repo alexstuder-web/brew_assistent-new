@@ -44,7 +44,7 @@ class _HopsManagerPageState extends State<HopsManagerPage> {
       }
 
       if ((profile.brewfatherUserId ?? '').isEmpty ||
-          (profile.brewfatherApiKey ?? '').isEmpty) {
+          !profile.brewfatherConfigured) {
         if (localItems.isEmpty) {
           throw Exception(
             'Bitte hinterlegen Sie erst Ihre Brewfather User ID und API Key in den Einstellungen.');
@@ -417,7 +417,7 @@ class _HopsManagerPageState extends State<HopsManagerPage> {
 
       try {
         final profile = await _userService.fetchProfile(widget.profileId);
-        if (profile == null || (profile.brewfatherUserId ?? '').isEmpty || (profile.brewfatherApiKey ?? '').isEmpty) {
+        if (profile == null || (profile.brewfatherUserId ?? '').isEmpty || !profile.brewfatherConfigured) {
            throw Exception('Fehlende Brewfather Zugangsdaten.');
         }
 

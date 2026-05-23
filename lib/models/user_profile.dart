@@ -5,10 +5,10 @@ class UserProfile {
     this.avatarBlob,
     required this.defaultBatchLiters,
     this.raptUserId,
-    this.raptApiKey,
     this.brewfatherUserId,
-    this.brewfatherApiKey,
     this.brewfatherSyncEnabled = false,
+    this.brewfatherConfigured = false,
+    this.raptConfigured = false,
     this.language = 'de',
   });
 
@@ -17,10 +17,14 @@ class UserProfile {
   final String? avatarBlob;
   final double? defaultBatchLiters;
   final String? raptUserId;
-  final String? raptApiKey;
   final String? brewfatherUserId;
-  final String? brewfatherApiKey;
   final bool brewfatherSyncEnabled;
+  // Vault-Indikatoren (DB GENERATED columns): true wenn ein Secret in
+  // vault.secrets existiert. Der eigentliche API-Key kommt nicht mehr per
+  // user_profiles-Row, sondern via RPC (Proxy) bzw. ist überhaupt nicht
+  // mehr im Browser sichtbar.
+  final bool brewfatherConfigured;
+  final bool raptConfigured;
   final String language;
 
   Map<String, dynamic> toJson() => {
@@ -29,9 +33,7 @@ class UserProfile {
         'avatar_blob': avatarBlob,
         'default_batch_liters': defaultBatchLiters,
         'rapt_user_id': raptUserId,
-        'rapt_api_key': raptApiKey,
         'brewfather_user_id': brewfatherUserId,
-        'brewfather_api_key': brewfatherApiKey,
         'brewfather_sync_enabled': brewfatherSyncEnabled,
         'language': language,
       };
@@ -43,11 +45,10 @@ class UserProfile {
         defaultBatchLiters:
             (json['default_batch_liters'] as num?)?.toDouble(),
         raptUserId: json['rapt_user_id'] as String?,
-        raptApiKey: json['rapt_api_key'] as String?,
         brewfatherUserId: json['brewfather_user_id'] as String?,
-        brewfatherApiKey: json['brewfather_api_key'] as String?,
         brewfatherSyncEnabled: json['brewfather_sync_enabled'] as bool? ?? false,
+        brewfatherConfigured: json['brewfather_configured'] as bool? ?? false,
+        raptConfigured: json['rapt_configured'] as bool? ?? false,
         language: json['language'] as String? ?? 'de',
       );
 }
-
