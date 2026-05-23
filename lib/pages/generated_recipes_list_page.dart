@@ -1,37 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/ai_recipe.dart';
+import '../services/ai_generated_recipes_service.dart';
 import 'recipe_result_page.dart';
 
 class GeneratedRecipesListPage extends StatefulWidget {
-  const GeneratedRecipesListPage({super.key});
+  GeneratedRecipesListPage({super.key, AiGeneratedRecipesService? service})
+      : _service = service ?? AiGeneratedRecipesService();
+
+  final AiGeneratedRecipesService _service;
 
   @override
   State<GeneratedRecipesListPage> createState() => _GeneratedRecipesListPageState();
 }
 
 class _GeneratedRecipesListPageState extends State<GeneratedRecipesListPage> {
-  final _supabase = Supabase.instance.client;
   late Future<List<Map<String, dynamic>>> _recipesFuture;
 
   @override
   void initState() {
     super.initState();
-    _recipesFuture = _fetchRecipes();
-  }
-
-  Future<List<Map<String, dynamic>>> _fetchRecipes() async {
-    final result = await _supabase
-        .schema('aibrewgenius')
-        .from('ai_generated_recipes_v2')
-        .select('id, basis_bier, bier_typ, created_at')
-        .order('created_at', ascending: false);
-    return List<Map<String, dynamic>>.from(result);
+    _recipesFuture = widget._service.fetchRecipes();
   }
 
   void _reload() {
     setState(() {
-      _recipesFuture = _fetchRecipes();
+      _recipesFuture = widget._service.fetchRecipes();
     });
   }
 
@@ -90,7 +83,7 @@ class _GeneratedRecipesListPageState extends State<GeneratedRecipesListPage> {
 
                         if (confirm == true) {
                           try {
-                            await _supabase.schema('aibrewgenius').from('ai_generated_recipes_v2').delete().eq('id', row['id']);
+                            await widget._service.deleteRecipe(row['id'].toString());
                             _reload();
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -112,12 +105,7 @@ class _GeneratedRecipesListPageState extends State<GeneratedRecipesListPage> {
                 ),
                 onTap: () async {
                    try {
-                     final r = await _supabase
-                         .schema('aibrewgenius')
-                         .from('ai_generated_recipes_v2')
-                         .select()
-                         .eq('id', row['id'])
-                         .single();
+                     final r = await widget._service.fetchRecipeById(row['id'].toString());
 
                      final malts = (r['malts'] as List?)?.map((m) => {
                        'Name': m['name'],

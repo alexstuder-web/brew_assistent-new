@@ -178,7 +178,7 @@ class ResourceButtonsGrid extends StatelessWidget {
               icon: Icons.receipt_long,
               label: 'Generierte Rezepte',
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const GeneratedRecipesListPage()),
+                MaterialPageRoute(builder: (_) => GeneratedRecipesListPage()),
               ),
             ),
             _managerButton(
