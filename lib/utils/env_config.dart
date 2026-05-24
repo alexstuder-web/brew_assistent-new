@@ -9,6 +9,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// ANON_KEY kann NICHT aus dem Hostname abgeleitet werden (ist ein signiertes JWT
 /// pro Supabase-Instanz). Er kommt weiter aus dem dotenv .env Asset, also
 /// build-time. Für single-VPS Setup ist das OK: ein .env, ein Image.
+///
+/// SUPABASE_URL und PROXY_URL sind via dotenv .env Asset override-fähig (analog
+/// RAPT_DASHBOARD_URL). Leer/nicht gesetzt → Hostname-Ableitung (Single-VPS-Default).
 class EnvConfig {
   static bool _isLocalHost() {
     final h = Uri.base.host;
@@ -21,13 +24,19 @@ class EnvConfig {
   }
 
   /// Supabase Kong Gateway URL.
+  /// Override via .env (SUPABASE_URL); non-local-Default: `supabase.[domain]` (kanonisch).
   static String supabaseUrl() {
+    final override = dotenv.env['SUPABASE_URL'];
+    if (override != null && override.isNotEmpty) return override;
     if (_isLocalHost()) return 'http://localhost:54321';
-    return 'https://db.${_baseDomain()}';
+    return 'https://supabase.${_baseDomain()}';
   }
 
   /// Brew-Proxy URL (für /api/rapt, /api/openai, …).
+  /// Override via .env (PROXY_URL); non-local-Default: `api.[domain]/api`.
   static String proxyUrl() {
+    final override = dotenv.env['PROXY_URL'];
+    if (override != null && override.isNotEmpty) return override;
     if (_isLocalHost()) return 'http://localhost:8083/api';
     return 'https://api.${_baseDomain()}/api';
   }
