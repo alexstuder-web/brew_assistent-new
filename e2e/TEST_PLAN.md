@@ -88,7 +88,7 @@ Wie in `project_auth_migration.md` definiert: Bootstrap-User `alex@alexstuder.ch
 
 | Variable | Default | Quelle |
 |---|---|---|
-| `BASE_URL` | `http://localhost:8084` | Argument oder `.env` |
+| `BASE_URL` | `http://localhost:8081` | Argument oder `.env` |
 | `PROXY_URL` | `http://localhost:8083` | `.env` |
 | `SUPABASE_URL` | `http://localhost:54321` | `.env` |
 | `SUPABASE_ANON_KEY` | aus `brew_assistent-new/.env` | `grep`-extrahiert |

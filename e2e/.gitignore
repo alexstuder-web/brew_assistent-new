@@ -2,4 +2,8 @@ node_modules/
 playwright-report/
 test-results/
 .auth/
-*.spec.ts-snapshots/
+# Snapshot directories are intentionally NOT excluded here.
+# Baselines are committed so that visual diffs are meaningful on subsequent runs
+# and for collaborators. They are macOS/arm64 local baselines; CI does not run
+# visual tests. To update after an intentional design change:
+#   cd e2e && npx playwright test tests/visual/snapshot.spec.ts --update-snapshots

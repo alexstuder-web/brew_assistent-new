@@ -25,24 +25,43 @@ export async function cleanupE2ERows(
     headers: {
       apikey: SUPABASE_ANON_KEY,
       Authorization: `Bearer ${accessToken}`,
+      'Accept-Profile': 'aibrewgenius',
+      'Content-Profile': 'aibrewgenius',
       'Content-Type': 'application/json',
     },
   });
 
   if (!res.ok()) {
     const body = await res.text();
-    console.warn(`[db-cleanup] DELETE ${table} returned ${res.status()}: ${body}`);
+    // Throw instead of warn: a silent cleanup failure leaves stale rows in DB,
+    // causing subsequent tests to fail with confusing "row not found" errors instead
+    // of an obvious beforeAll/afterAll setup failure.
+    throw new Error(`[db-cleanup] DELETE ${table} returned ${res.status()}: ${body}`);
   }
 }
 
 /**
- * Deletes rows in ai_generated_recipes_v2 owned by the test user with name like "e2e-%".
+ * Deletes rows in ai_generated_recipes_v2 owned by the test user with basis_bier like "e2e-%".
+ * Note: ai_generated_recipes_v2 uses "basis_bier" as its name column, not "name".
  */
 export async function cleanupE2ERecipes(
   requestContext: APIRequestContext,
   accessToken: string,
 ): Promise<void> {
-  await cleanupE2ERows(requestContext, accessToken, 'ai_generated_recipes_v2');
+  const url = `${SUPABASE_URL}/rest/v1/ai_generated_recipes_v2?basis_bier=like.e2e-%`;
+  const res = await requestContext.delete(url, {
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${accessToken}`,
+      'Accept-Profile': 'aibrewgenius',
+      'Content-Profile': 'aibrewgenius',
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!res.ok()) {
+    const body = await res.text();
+    throw new Error(`[db-cleanup] DELETE ai_generated_recipes_v2 returned ${res.status()}: ${body}`);
+  }
 }
 
 // ---------------------------------------------------------------------------
