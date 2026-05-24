@@ -35,8 +35,8 @@ Future<void> main() async {
   );
 
   // Pre-auth: kein Profil-Fetch (RLS blockt). Locale 'de' als Default,
-  // Profil-Sprache greift erst nach Login (Profile-Page setzt sie um).
-  runApp(const BrewMateApp(initialLocale: Locale('de')));
+  // Profil-Sprache greift erst nach Login (AuthGate setzt sie nach Profil-Fetch um).
+  runApp(BrewMateApp(key: BrewMateApp.appKey, initialLocale: const Locale('de')));
 }
 
 class BrewMateApp extends StatefulWidget {
@@ -65,6 +65,18 @@ class BrewMateApp extends StatefulWidget {
   final FiningAgentsRepository? finingAgentsRepository;
   final YeastBankRepository? yeastRepository;
 
+  /// Internal GlobalKey for locale changes from outside the widget tree (e.g.
+  /// AuthGate after an async profile fetch where BuildContext is unavailable).
+  // ignore: library_private_types_in_public_api
+  static final GlobalKey<_BrewMateAppState> appKey = GlobalKey<_BrewMateAppState>();
+
+  /// Apply [newLocale] via [appKey] — safe to call from async callbacks.
+  static void applyLocale(Locale newLocale) {
+    appKey.currentState?.setLocale(newLocale);
+  }
+
+  /// Context-based variant kept for callers that already hold a mounted context
+  /// (e.g. UserProfileController.saveProfile).
   static void setLocale(BuildContext context, Locale newLocale) {
     _BrewMateAppState? state = context.findAncestorStateOfType<_BrewMateAppState>();
     state?.setLocale(newLocale);
