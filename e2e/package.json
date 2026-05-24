@@ -1,0 +1,20 @@
+{
+  "name": "brew-assistent-e2e",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests for brew_assistent-new",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.ts",
+    "test:auth": "playwright test tests/auth.spec.ts",
+    "test:headed": "playwright test --headed",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "report": "playwright show-report",
+    "global-setup": "npx ts-node global-setup.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
