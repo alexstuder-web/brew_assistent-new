@@ -46,3 +46,6 @@ app.*.map.json
 
 # Real env file (build-time, not committed)
 .env
+
+# requirement-analyst specs — transient build-inputs, never committed
+specs/
