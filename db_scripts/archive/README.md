@@ -1,0 +1,1 @@
+historische Migrationen vor dem Per-App-Baseline-Cut (Pivot 2026-05-25); NICHT mehr anwenden — baseline.sql ist der Startpunkt, neue Aenderungen ab Phase 2 als nummerierte Migrationen mit schema_migrations.
