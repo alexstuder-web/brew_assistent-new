@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:web/web.dart' as web;
@@ -20,6 +23,10 @@ import 'cookie_session_storage.dart';
 /// kurzem Logout führen. Der nächste Tab-Fokus stellt die Session wieder her.
 /// Ohne serverseitige Refresh-Token-Reuse-Toleranz nicht vollständig
 /// eliminierbar. Ein BroadcastChannel-Koordinator wäre over-engineered.
+///
+/// In kDebugMode only: exposes `window.__testTriggerSessionSync` so that
+/// Playwright (headless) can trigger the same sync logic without needing a
+/// real visibilitychange event.
 class SessionSyncWidget extends StatefulWidget {
   const SessionSyncWidget({super.key, required this.child});
 
@@ -41,11 +48,22 @@ class _SessionSyncWidgetState extends State<SessionSyncWidget> {
         _syncFromCookie();
       }
     });
+
+    if (kDebugMode) {
+      // Expose a test hook so Playwright can trigger the sync logic in headless
+      // mode (where visibilitychange events cannot be fired reliably).
+      // Strictly kDebugMode-gated — removed in Release builds by tree-shaking.
+      final JSFunction hook = (() => _syncFromCookie()).toJS;
+      web.window.setProperty('__testTriggerSessionSync'.toJS, hook);
+    }
   }
 
   @override
   void dispose() {
     _visibilitySub?.cancel();
+    if (kDebugMode) {
+      web.window.setProperty('__testTriggerSessionSync'.toJS, null);
+    }
     super.dispose();
   }
 
