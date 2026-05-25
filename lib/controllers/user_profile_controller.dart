@@ -80,10 +80,13 @@ class UserProfileController extends ChangeNotifier {
       name: userNameCtrl.text.trim(),
       avatarBlob: newAvatarBase64 ?? loadedProfile?.avatarBlob,
       defaultBatchLiters: defaultBatch,
+      // raptUserId: aibrewgenius-Feld (Runtrip), kanonischer Store ist rapt-Schema.
       raptUserId: loadedProfile?.raptUserId,
       brewfatherUserId: loadedProfile?.brewfatherUserId,
       brewfatherSyncEnabled: loadedProfile?.brewfatherSyncEnabled ?? false,
       brewfatherConfigured: loadedProfile?.brewfatherConfigured ?? false,
+      // raptConfigured ist nach Migration 006 in aibrewgenius dauerhaft false;
+      // ist ein generated Column und nicht in toJson() — wird nicht geschrieben.
       raptConfigured: loadedProfile?.raptConfigured ?? false,
       language: selectedLanguage,
     );

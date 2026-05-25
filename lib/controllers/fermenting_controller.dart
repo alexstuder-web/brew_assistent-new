@@ -81,10 +81,11 @@ class FermentingController extends ChangeNotifier {
     _safeNotify();
 
     try {
-      final profile = await UserProfileService().fetchDefaultProfile();
-      if (profile == null ||
-          (profile.raptUserId ?? '').isEmpty ||
-          !profile.raptConfigured) {
+      // RAPT-Status kommt aus rapt-Schema (rapt.user_profiles) — nicht aus dem
+      // aibrewgenius-Profil, das nach Migration 006 dauerhaft rapt_configured=false hat.
+      final raptStatus = await UserProfileService().fetchRaptStatus();
+      if (!raptStatus.raptConfigured ||
+          (raptStatus.raptUserId ?? '').isEmpty) {
         throw Exception('Keine RAPT Zugangsdaten im Profil.');
       }
 

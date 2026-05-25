@@ -79,11 +79,33 @@ class UserProfileService implements UserProfileRepository {
         .rpc('set_my_brewfather_creds', params: {'p_api_key': apiKey});
   }
 
-  /// Setzt oder löscht den RAPT-API-Key über die Vault-RPC.
-  Future<void> setRaptApiKey(String? apiKey) async {
+  /// Setzt oder löscht den RAPT-API-Key über die rapt-Domänen-Vault-RPC.
+  /// [raptUserId] und [apiKey] null -> Secret wird gelöscht, `rapt_configured` -> false.
+  /// RAPT-Creds liegen kanonisch im rapt-Schema (nicht mehr in aibrewgenius).
+  Future<void> setRaptApiKey(String? apiKey, {String? raptUserId}) async {
     await _client
-        .schema(_schemaName)
-        .rpc('set_my_rapt_creds', params: {'p_api_key': apiKey});
+        .schema('rapt')
+        .rpc('set_my_rapt_creds', params: {
+          'p_rapt_user_id': raptUserId,
+          'p_api_key': apiKey,
+        });
+  }
+
+  /// Liest den RAPT-Status (rapt_configured, rapt_user_id) aus dem rapt-Schema.
+  /// RLS filtert auf auth.uid() — gibt null zurück wenn noch kein Row existiert.
+  Future<({bool raptConfigured, String? raptUserId})> fetchRaptStatus() async {
+    final data = await _client
+        .schema('rapt')
+        .from('user_profiles')
+        .select('rapt_configured, rapt_user_id')
+        .maybeSingle();
+    if (data == null) {
+      return (raptConfigured: false, raptUserId: null);
+    }
+    return (
+      raptConfigured: data['rapt_configured'] as bool? ?? false,
+      raptUserId: data['rapt_user_id'] as String?,
+    );
   }
 
   @override

@@ -32,7 +32,8 @@ class UserProfile {
         'name': name,
         'avatar_blob': avatarBlob,
         'default_batch_liters': defaultBatchLiters,
-        'rapt_user_id': raptUserId,
+        // rapt_user_id intentionally omitted — kanonischer Store ist rapt-Schema;
+        // Dual-Write via aibrewgenius-Upsert vermeiden.
         'brewfather_user_id': brewfatherUserId,
         'brewfather_sync_enabled': brewfatherSyncEnabled,
         'language': language,

@@ -205,6 +205,9 @@ class _YeastBankManagerPageState extends State<YeastBankManagerPage> {
       brewfatherUserId: _userProfile!.brewfatherUserId,
       brewfatherSyncEnabled: value,
       brewfatherConfigured: _userProfile!.brewfatherConfigured,
+      // raptConfigured ist ein DB-generated Column (rapt-Schema) und nicht in
+      // toJson() — wird nicht in die DB geschrieben; aibrewgenius-Feld ist nach
+      // Migration 006 dauerhaft false und hier nur für den In-Memory-Stand.
       raptConfigured: _userProfile!.raptConfigured,
       language: _userProfile!.language,
     );

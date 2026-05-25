@@ -16,6 +16,9 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
   bool _isLoading = true;
   bool _isSaving = false;
   UserProfile? _profile;
+  // RAPT-Status kommt aus rapt-Schema (rapt.user_profiles), da aibrewgenius
+  // nach Migration 006 dauerhaft rapt_configured=false hat.
+  bool _raptConfigured = false;
 
   final TextEditingController _raptUserIdCtrl = TextEditingController();
   final TextEditingController _raptApiKeyCtrl = TextEditingController();
@@ -39,19 +42,25 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
 
   Future<void> _loadData() async {
     try {
+      // Zwei sequentielle Reads: aibrewgenius für Brewfather-Daten, rapt für RAPT-Status.
       final profile = await _service.fetchProfile(widget.profileId);
-      if (mounted) {
-        setState(() {
-          _profile = profile;
-          if (profile != null) {
-            _raptUserIdCtrl.text = profile.raptUserId ?? '';
-            _brewfatherUserIdCtrl.text = profile.brewfatherUserId ?? '';
-            // API-Keys werden NICHT vorbefüllt — sie liegen verschlüsselt
-            // im Vault und sind im Frontend nicht lesbar.
-          }
-          _isLoading = false;
-        });
-      }
+      final raptStatus = await _service.fetchRaptStatus();
+      if (!mounted) return;
+      setState(() {
+        _profile = profile;
+        _raptConfigured = raptStatus.raptConfigured;
+        if (profile != null) {
+          // RAPT-User-ID aus dem rapt-Store bevorzugen; Fallback auf aibrewgenius.
+          _raptUserIdCtrl.text =
+              raptStatus.raptUserId ?? profile.raptUserId ?? '';
+          _brewfatherUserIdCtrl.text = profile.brewfatherUserId ?? '';
+          // API-Keys werden NICHT vorbefüllt — sie liegen verschlüsselt
+          // im Vault und sind im Frontend nicht lesbar.
+        } else {
+          _raptUserIdCtrl.text = raptStatus.raptUserId ?? '';
+        }
+        _isLoading = false;
+      });
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -82,7 +91,9 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
         brewfatherSyncEnabled: _profile!.brewfatherSyncEnabled,
         language: _profile!.language,
         brewfatherConfigured: _profile!.brewfatherConfigured,
-        raptConfigured: _profile!.raptConfigured,
+        // raptConfigured ist ein DB-generated Column im rapt-Schema; aibrewgenius hat
+        // nach Migration 006 dauerhaft false. Den lokal gecachten rapt-Store-Wert verwenden.
+        raptConfigured: _raptConfigured,
       );
       await _service.saveProfile(updatedProfile);
 
@@ -94,7 +105,19 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
       }
       final newRaptKey = _raptApiKeyCtrl.text.trim();
       if (newRaptKey.isNotEmpty) {
-        await _service.setRaptApiKey(newRaptKey);
+        final raptUserId = _raptUserIdCtrl.text.trim();
+        if (raptUserId.isEmpty) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('RAPT User ID erforderlich — bitte zuerst die User ID eintragen.'),
+              ),
+            );
+            setState(() => _isSaving = false);
+          }
+          return;
+        }
+        await _service.setRaptApiKey(newRaptKey, raptUserId: raptUserId);
       }
 
       if (mounted) {
@@ -133,6 +156,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
       } else {
         await _service.setRaptApiKey(null);
       }
+      if (!mounted) return;
       await _loadData();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -164,7 +188,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
                           title: 'R.A.P.T',
                           userCtrl: _raptUserIdCtrl,
                           keyCtrl: _raptApiKeyCtrl,
-                          configured: _profile!.raptConfigured,
+                          configured: _raptConfigured,
                           onClear: () => _clearKey(isBrewfather: false),
                         ),
                         const SizedBox(height: 24),
