@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/image_attachment.dart';
 import '../utils/env_config.dart';
 
@@ -34,6 +35,17 @@ class OpenAIService {
     return Uri.parse('$baseUrl/$path');
   }
 
+  Map<String, String> _headers() {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session == null) {
+      throw StateError('Kein eingeloggter User — OpenAI-Proxy-Call nicht möglich.');
+    }
+    return {
+      'Authorization': 'Bearer ${session.accessToken}',
+      'Content-Type': 'application/json',
+    };
+  }
+
   Future<String> brewRecipe(
     String userPrompt, {
     ImageAttachment? attachment,
@@ -49,7 +61,7 @@ class OpenAIService {
 
     final response = await http.post(
       _brewEndpoint,
-      headers: const {'Content-Type': 'application/json'},
+      headers: _headers(),
       body: jsonEncode(payload),
     );
 
@@ -73,7 +85,7 @@ class OpenAIService {
   Future<ShopSearchResponse> searchShops(String query) async {
     final response = await http.post(
       _shopEndpoint,
-      headers: const {'Content-Type': 'application/json'},
+      headers: _headers(),
       body: jsonEncode({'query': query}),
     );
 
@@ -91,7 +103,7 @@ class OpenAIService {
   Future<String> generalChat(String prompt, {ImageAttachment? attachment}) async {
     final response = await http.post(
       _chatEndpoint,
-      headers: const {'Content-Type': 'application/json'},
+      headers: _headers(),
       body: jsonEncode({
         'prompt': prompt,
         if (attachment != null) 'image': attachment.toJson(),
@@ -112,7 +124,7 @@ class OpenAIService {
   Future<String> generateImage(String prompt, {ImageAttachment? attachment}) async {
     final response = await http.post(
       _imageEndpoint,
-      headers: const {'Content-Type': 'application/json'},
+      headers: _headers(),
       body: jsonEncode({
         'prompt': prompt,
         if (attachment != null) 'image': attachment.toJson(),
