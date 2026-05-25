@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'utils/env_config.dart';
+import 'utils/cookie_session_storage.dart';
+import 'utils/session_sync_widget.dart';
 import 'widgets/auth_gate.dart';
 import 'pages/user_profile_page.dart';
 import 'pages/recipe_prompt_page.dart';
@@ -32,11 +34,16 @@ Future<void> main() async {
     url: EnvConfig.supabaseUrl(),
     anonKey: EnvConfig.supabaseAnonKey(),
     postgrestOptions: const PostgrestClientOptions(schema: 'aibrewgenius'),
+    authOptions: FlutterAuthClientOptions(localStorage: CookieSessionStorage()),
   );
 
   // Pre-auth: kein Profil-Fetch (RLS blockt). Locale 'de' als Default,
   // Profil-Sprache greift erst nach Login (AuthGate setzt sie nach Profil-Fetch um).
-  runApp(BrewMateApp(key: BrewMateApp.appKey, initialLocale: const Locale('de')));
+  runApp(
+    SessionSyncWidget(
+      child: BrewMateApp(key: BrewMateApp.appKey, initialLocale: const Locale('de')),
+    ),
+  );
 }
 
 class BrewMateApp extends StatefulWidget {
