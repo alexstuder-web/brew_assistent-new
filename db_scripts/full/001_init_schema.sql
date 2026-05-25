@@ -1,3 +1,37 @@
+-- =============================================================================
+-- 001_init_schema.sql — HISTORISCHER BASELINE-STAND
+-- =============================================================================
+-- Diese Datei ist der ursprüngliche Schema-Dump (Single-User, pre-Auth, pre-Vault).
+-- Sie wird NUR für ein komplettes Greenfield-Setup (leere DB) verwendet.
+-- Für jedes andere Setup — Migration einer bestehenden Instanz, lokale Entwicklung
+-- oder Produktion — MÜSSEN danach zwingend alle Migrationen in aufsteigender
+-- Reihenfolge angewendet werden:
+--
+--   002_auth.sql                       Multi-User + RLS (user_profiles.id → uuid,
+--                                      alle Child-FKs, RLS-Policies, Auth-Trigger)
+--   003_vault.sql                      API-Keys encrypted-at-rest via vault.secrets;
+--                                      Klartext-Spalten brewfather_api_key /
+--                                      rapt_api_key werden genullt.
+--   004_proxy_role.sql                 Dedizierter proxy_sync-Role für den BFF.
+--   005_fix_proxy_role_grants.sql      Grant-Korrekturen für proxy_sync.
+--   006_retire_aibrewgenius_rapt.sql   RAPT-Creds in rapt-Schema delegiert;
+--                                      aibrewgenius-RAPT-RPCs zu Shims degradiert.
+--   007_harden_brewfather_search_path.sql  search_path-Härtung für Brewfather-RPCs.
+--   008_drop_aibrewgenius_rapt_columns.sql Physischer Drop der RAPT-Spalten
+--                                      (rapt_configured, rapt_secret_id,
+--                                       rapt_user_id, rapt_api_key) aus
+--                                      aibrewgenius.user_profiles.
+--   009_drop_aibrewgenius_rapt_shims.sql   Drop der RAPT-Delegation-RPCs
+--                                      (get_my_rapt_creds / set_my_rapt_creds)
+--                                      aus dem aibrewgenius-Schema.
+--
+-- Spalten, die in diesem Baseline sichtbar sind, aber per Migration entfernt
+-- oder verschoben wurden:
+--   user_profiles.rapt_user_id / rapt_api_key  → dropped by 008
+--   user_profiles.brewfather_api_key           → zeroed (vault) by 003,
+--                                                nicht gedroppt (Klartext-Spalte bleibt)
+-- =============================================================================
+
 DROP SCHEMA IF EXISTS aibrewgenius CASCADE;
 
 
