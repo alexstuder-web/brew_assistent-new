@@ -8,6 +8,7 @@ class BfBatch {
   final int? brewDate; // Milliseconds
   final String? recipeName;
   final Map<String, dynamic> data;
+  // write-only: nur fuer DB-Round-trip erhalten; RAPT-Telemetrie lebt im rapt_dashboard
   Map<String, dynamic> raptData;
   Map<String, dynamic> analysisData;
 

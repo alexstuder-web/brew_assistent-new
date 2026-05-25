@@ -16,12 +16,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
   bool _isLoading = true;
   bool _isSaving = false;
   UserProfile? _profile;
-  // RAPT-Status kommt aus rapt-Schema (rapt.user_profiles), da aibrewgenius
-  // nach Migration 006 dauerhaft rapt_configured=false hat.
-  bool _raptConfigured = false;
 
-  final TextEditingController _raptUserIdCtrl = TextEditingController();
-  final TextEditingController _raptApiKeyCtrl = TextEditingController();
   final TextEditingController _brewfatherUserIdCtrl = TextEditingController();
   final TextEditingController _brewfatherApiKeyCtrl = TextEditingController();
 
@@ -33,8 +28,6 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
 
   @override
   void dispose() {
-    _raptUserIdCtrl.dispose();
-    _raptApiKeyCtrl.dispose();
     _brewfatherUserIdCtrl.dispose();
     _brewfatherApiKeyCtrl.dispose();
     super.dispose();
@@ -42,21 +35,14 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
 
   Future<void> _loadData() async {
     try {
-      // Zwei sequentielle Reads: aibrewgenius für Brewfather-Daten, rapt für RAPT-Status.
       final profile = await _service.fetchProfile(widget.profileId);
-      final raptStatus = await _service.fetchRaptStatus();
       if (!mounted) return;
       setState(() {
         _profile = profile;
-        _raptConfigured = raptStatus.raptConfigured;
         if (profile != null) {
-          // RAPT-User-ID aus dem rapt-Store (kanonischer Store).
-          _raptUserIdCtrl.text = raptStatus.raptUserId ?? '';
           _brewfatherUserIdCtrl.text = profile.brewfatherUserId ?? '';
           // API-Keys werden NICHT vorbefüllt — sie liegen verschlüsselt
           // im Vault und sind im Frontend nicht lesbar.
-        } else {
-          _raptUserIdCtrl.text = raptStatus.raptUserId ?? '';
         }
         _isLoading = false;
       });
@@ -75,7 +61,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
     setState(() => _isSaving = true);
 
     try {
-      // 1. Klartext-Felder (user_id, sync_enabled etc.) via regulärem upsert.
+      // Klartext-Felder via regulärem upsert.
       final updatedProfile = UserProfile(
         id: _profile!.id,
         name: _profile!.name,
@@ -90,35 +76,18 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
       );
       await _service.saveProfile(updatedProfile);
 
-      // 2. API-Keys via Vault-RPC — nur wenn der User wirklich getippt hat.
-      //    Leeres Feld = "nichts ändern". Explizit löschen = eigener Button.
+      // API-Key via Vault-RPC — nur wenn der User wirklich getippt hat.
+      // Leeres Feld = "nichts ändern". Explizit löschen = eigener Button.
       final newBfKey = _brewfatherApiKeyCtrl.text.trim();
       if (newBfKey.isNotEmpty) {
         await _service.setBrewfatherApiKey(newBfKey);
       }
-      final newRaptKey = _raptApiKeyCtrl.text.trim();
-      if (newRaptKey.isNotEmpty) {
-        final raptUserId = _raptUserIdCtrl.text.trim();
-        if (raptUserId.isEmpty) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('RAPT User ID erforderlich — bitte zuerst die User ID eintragen.'),
-              ),
-            );
-            setState(() => _isSaving = false);
-          }
-          return;
-        }
-        await _service.setRaptApiKey(newRaptKey, raptUserId: raptUserId);
-      }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Einstellungen gespeichert')),
-        );
-        Navigator.pop(context);
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Einstellungen gespeichert')),
+      );
+      Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -130,11 +99,11 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
     }
   }
 
-  Future<void> _clearKey({required bool isBrewfather}) async {
+  Future<void> _clearBrewfatherKey() async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('${isBrewfather ? "Brewfather" : "RAPT"}-Key löschen?'),
+        title: const Text('Brewfather-Key löschen?'),
         content: const Text('Der gespeicherte API-Key wird aus dem Vault gelöscht.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Abbrechen')),
@@ -144,11 +113,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
     );
     if (ok != true) return;
     try {
-      if (isBrewfather) {
-        await _service.setBrewfatherApiKey(null);
-      } else {
-        await _service.setRaptApiKey(null);
-      }
+      await _service.setBrewfatherApiKey(null);
       if (!mounted) return;
       await _loadData();
       if (mounted) {
@@ -177,21 +142,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
                     constraints: const BoxConstraints(maxWidth: 600),
                     child: Column(
                       children: [
-                        _buildSection(
-                          title: 'R.A.P.T',
-                          userCtrl: _raptUserIdCtrl,
-                          keyCtrl: _raptApiKeyCtrl,
-                          configured: _raptConfigured,
-                          onClear: () => _clearKey(isBrewfather: false),
-                        ),
-                        const SizedBox(height: 24),
-                        _buildSection(
-                          title: 'Brewfather',
-                          userCtrl: _brewfatherUserIdCtrl,
-                          keyCtrl: _brewfatherApiKeyCtrl,
-                          configured: _profile!.brewfatherConfigured,
-                          onClear: () => _clearKey(isBrewfather: true),
-                        ),
+                        _buildBrewfatherSection(),
                         const SizedBox(height: 32),
                         SizedBox(
                           width: double.infinity,
@@ -209,13 +160,8 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
     );
   }
 
-  Widget _buildSection({
-    required String title,
-    required TextEditingController userCtrl,
-    required TextEditingController keyCtrl,
-    required bool configured,
-    required VoidCallback onClear,
-  }) {
+  Widget _buildBrewfatherSection() {
+    final configured = _profile!.brewfatherConfigured;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -224,7 +170,8 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
           children: [
             Row(
               children: [
-                Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text('Brewfather',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(width: 10),
                 if (configured)
                   const Chip(
@@ -242,12 +189,12 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: userCtrl,
+              controller: _brewfatherUserIdCtrl,
               decoration: const InputDecoration(labelText: 'User ID'),
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: keyCtrl,
+              controller: _brewfatherApiKeyCtrl,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'API-Key',
@@ -258,7 +205,7 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
                     ? IconButton(
                         icon: const Icon(Icons.delete_outline),
                         tooltip: 'Key aus Vault löschen',
-                        onPressed: onClear,
+                        onPressed: _clearBrewfatherKey,
                       )
                     : null,
               ),

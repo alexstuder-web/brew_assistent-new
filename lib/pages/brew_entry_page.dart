@@ -5,6 +5,7 @@ import 'discovery_welcome_page.dart';
 import 'user_profile_page.dart';
 import 'recipe_prompt_page.dart';
 import '../utils/env_config.dart';
+import '../services/sso_service.dart';
 import '../widgets/entry_button.dart';
 
 class BrewEntryPage extends StatelessWidget {
@@ -30,8 +31,31 @@ class BrewEntryPage extends StatelessWidget {
     }
   }
 
+  /// Holt ein SSO-Ticket vom assistent-Proxy und öffnet das rapt_dashboard
+  /// mit dem Ticket im URL-Fragment (#sso=TICKET).
+  ///
+  /// Bei Proxy-Fehler: SnackBar + Dashboard ohne Ticket öffnen (Fallback).
+  /// Das Ticket ist single-use und max. 60 s gültig — kein Persistieren.
   Future<void> _openRaptDashboard(BuildContext context) async {
-    final uri = Uri.parse(EnvConfig.raptDashboardUrl());
+    final baseUrl = EnvConfig.raptDashboardUrl();
+    String? ticket;
+
+    try {
+      ticket = await SsoService().fetchRaptTicket();
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Konnte RAPT-Login nicht vorbereiten.')),
+      );
+    }
+
+    if (!context.mounted) return;
+
+    // Ticket im URL-Fragment (nicht Query) — landet nicht in Server-Logs/Referer.
+    final uri = ticket != null
+        ? Uri.parse('$baseUrl/#sso=$ticket')
+        : Uri.parse(baseUrl);
+
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

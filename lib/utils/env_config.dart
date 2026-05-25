@@ -23,16 +23,16 @@ class EnvConfig {
     return Uri.base.host.replaceFirst(RegExp(r'^[^.]+\.'), '');
   }
 
-  /// Supabase Kong Gateway URL.
-  /// Override via .env (SUPABASE_URL); non-local-Default: `supabase.[domain]` (kanonisch).
+  /// Supabase Kong Gateway URL (assistent-eigene Lean-Supabase).
+  /// Override via .env (SUPABASE_URL); non-local-Default: `db-assistent.[domain]`.
   static String supabaseUrl() {
     final override = dotenv.env['SUPABASE_URL'];
     if (override != null && override.isNotEmpty) return override;
     if (_isLocalHost()) return 'http://localhost:54321';
-    return 'https://supabase.${_baseDomain()}';
+    return 'https://db-assistent.${_baseDomain()}';
   }
 
-  /// Brew-Proxy URL (für /api/rapt, /api/openai, …).
+  /// Brew-Proxy URL (für /api/openai, /api/brewfather, /api/sso/rapt-ticket, …).
   /// Override via .env (PROXY_URL); non-local-Default: `api-assistent.[domain]/api`.
   static String proxyUrl() {
     final override = dotenv.env['PROXY_URL'];
