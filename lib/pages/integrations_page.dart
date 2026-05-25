@@ -50,9 +50,8 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
         _profile = profile;
         _raptConfigured = raptStatus.raptConfigured;
         if (profile != null) {
-          // RAPT-User-ID aus dem rapt-Store bevorzugen; Fallback auf aibrewgenius.
-          _raptUserIdCtrl.text =
-              raptStatus.raptUserId ?? profile.raptUserId ?? '';
+          // RAPT-User-ID aus dem rapt-Store (kanonischer Store).
+          _raptUserIdCtrl.text = raptStatus.raptUserId ?? '';
           _brewfatherUserIdCtrl.text = profile.brewfatherUserId ?? '';
           // API-Keys werden NICHT vorbefüllt — sie liegen verschlüsselt
           // im Vault und sind im Frontend nicht lesbar.
@@ -82,18 +81,12 @@ class _IntegrationsPageState extends State<IntegrationsPage> {
         name: _profile!.name,
         avatarBlob: _profile!.avatarBlob,
         defaultBatchLiters: _profile!.defaultBatchLiters,
-        raptUserId: _raptUserIdCtrl.text.trim().isEmpty
-            ? null
-            : _raptUserIdCtrl.text.trim(),
         brewfatherUserId: _brewfatherUserIdCtrl.text.trim().isEmpty
             ? null
             : _brewfatherUserIdCtrl.text.trim(),
         brewfatherSyncEnabled: _profile!.brewfatherSyncEnabled,
         language: _profile!.language,
         brewfatherConfigured: _profile!.brewfatherConfigured,
-        // raptConfigured ist ein DB-generated Column im rapt-Schema; aibrewgenius hat
-        // nach Migration 006 dauerhaft false. Den lokal gecachten rapt-Store-Wert verwenden.
-        raptConfigured: _raptConfigured,
       );
       await _service.saveProfile(updatedProfile);
 
