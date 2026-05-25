@@ -33,12 +33,12 @@ class EnvConfig {
   }
 
   /// Brew-Proxy URL (für /api/rapt, /api/openai, …).
-  /// Override via .env (PROXY_URL); non-local-Default: `api.[domain]/api`.
+  /// Override via .env (PROXY_URL); non-local-Default: `api-assistent.[domain]/api`.
   static String proxyUrl() {
     final override = dotenv.env['PROXY_URL'];
     if (override != null && override.isNotEmpty) return override;
     if (_isLocalHost()) return 'http://localhost:8083/api';
-    return 'https://api.${_baseDomain()}/api';
+    return 'https://api-assistent.${_baseDomain()}/api';
   }
 
   /// RAPT Brewing Dashboard URL — wird in neuem Tab geöffnet.
