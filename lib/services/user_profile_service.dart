@@ -141,7 +141,7 @@ class UserProfileService implements UserProfileRepository {
 
     final userProfileId = batches.first.userProfileId;
     final existingData = await _tableBatches()
-        .select('brewfather_id, rapt_data, analysis_data, data, id')
+        .select('brewfather_id, analysis_data, data, id')
         .eq('user_profile_id', userProfileId);
     
     final Map<String, Map<String, dynamic>> existingMap = {
@@ -162,12 +162,6 @@ class UserProfileService implements UserProfileRepository {
           if (existingMap.containsKey(bfId)) {
              final existing = existingMap[bfId]!;
              
-             final incomingRapt = json['rapt_data'] as Map<String, dynamic>? ?? {};
-             final existingRapt = existing['rapt_data'] as Map<String, dynamic>? ?? {};
-             if (incomingRapt.isEmpty && existingRapt.isNotEmpty) {
-                json['rapt_data'] = existingRapt;
-             }
-
              final incomingAnalysis = json['analysis_data'] as Map<String, dynamic>? ?? {};
              final existingAnalysis = existing['analysis_data'] as Map<String, dynamic>? ?? {};
              if (incomingAnalysis.isEmpty && existingAnalysis.isNotEmpty) {

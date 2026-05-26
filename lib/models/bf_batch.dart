@@ -8,8 +8,6 @@ class BfBatch {
   final int? brewDate; // Milliseconds
   final String? recipeName;
   final Map<String, dynamic> data;
-  // write-only: nur fuer DB-Round-trip erhalten; RAPT-Telemetrie lebt im rapt_dashboard
-  Map<String, dynamic> raptData;
   Map<String, dynamic> analysisData;
 
   BfBatch({
@@ -22,10 +20,8 @@ class BfBatch {
     this.brewDate,
     this.recipeName,
     required this.data,
-    Map<String, dynamic>? raptData,
     Map<String, dynamic>? analysisData,
-  }) : raptData = raptData ?? {},
-       analysisData = analysisData ?? {};
+  }) : analysisData = analysisData ?? {};
 
   factory BfBatch.fromJson(Map<String, dynamic> json) {
     return BfBatch(
@@ -38,7 +34,6 @@ class BfBatch {
       brewDate: (json['brew_date'] as num?)?.toInt(),
       recipeName: json['recipe_name'],
       data: json['data'] ?? {},
-      raptData: Map<String, dynamic>.from(json['rapt_data'] ?? {}),
       analysisData: Map<String, dynamic>.from(json['analysis_data'] ?? {}),
     );
   }
@@ -54,7 +49,6 @@ class BfBatch {
       'brew_date': brewDate,
       'recipe_name': recipeName,
       'data': data,
-      'rapt_data': raptData,
       'analysis_data': analysisData,
     };
   }
